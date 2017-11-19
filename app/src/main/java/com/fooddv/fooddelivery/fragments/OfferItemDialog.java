@@ -28,7 +28,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class OfferItemDialog extends DialogFragment {
 
-
     public static OfferItemDialog newInstance(int position) {
 
         OfferItemDialog f = new OfferItemDialog();
@@ -40,11 +39,11 @@ public class OfferItemDialog extends DialogFragment {
         return f;
     }
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -54,14 +53,23 @@ public class OfferItemDialog extends DialogFragment {
         final int position = getArguments().getInt("position");
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
+        builder.setTitle("Wpisz ilość:");
         builder.setView(myView);
                 // Add action buttons
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                           EditText quantity = (EditText)myView.findViewById(R.id.editTextOfferDialogQuantity);
-                          Toast.makeText(getContext(),quantity.getText(),Toast.LENGTH_SHORT).show();
-                        ((UserActivity)getActivity()).modyPrice(position,Integer.parseInt(quantity.getText().toString()));
+
+                            try {
+
+                               ((UserActivity) getActivity()).modyQuantity(position, Integer.parseInt(quantity.getText().toString()));
+
+                            }catch(NumberFormatException msg){
+
+                                Toast.makeText(getContext(),msg.getMessage(),Toast.LENGTH_SHORT).show();
+
+                            }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

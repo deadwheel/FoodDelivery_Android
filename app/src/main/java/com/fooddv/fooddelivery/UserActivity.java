@@ -20,6 +20,7 @@ import com.fooddv.fooddelivery.models.Response.OfferResponse;
 import com.fooddv.fooddelivery.network.ApiService;
 import com.fooddv.fooddelivery.network.RetrofitBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,44 +105,46 @@ public class UserActivity extends AppCompatActivity {
 
                             List<Offer> bucket = new ArrayList<>();
 
-                            for (int i = 0; i < gridView.getCount(); i++) {
-                                if (checked.get(i)) {
+                                for (int i = 0; i < gridView.getCount(); i++) {
 
-                                    offers.get(i).setOffer_id(offers.get(i).getId());
-                                    bucket.add(offers.get(i));
+                                    if (checked.get(i)) {
+                                        Integer quantity = offers.get(i).getQuantity();
 
+                                        if (quantity > 0 && quantity != null) {
 
+                                            offers.get(i).setOffer_id(offers.get(i).getId());
+                                            bucket.add(offers.get(i));
+                                        }
+
+                                    }
                                 }
-                            }
 
 
                             Call<OfferResponse> call;
 
                             Map<String, Object> map = new HashMap<String, Object>();
 
-                           map.put("order_details", bucket);
+                             map.put("order_details", bucket);
 
+                            Toast.makeText(getApplicationContext(),String.valueOf(bucket.size()),Toast.LENGTH_SHORT).show();
 
-                            if(checked.size() > 0 && checked != null){
-                                  makeOrder(map);
+                            if(bucket.size() > 0){
                                   checked.clear();
+                                  bucket.clear();
+                                  makeOrder(map);
 
                         }else {
 
                                 Toast.makeText(getApplicationContext(),"Musisz wybrać conajmniej 1 produkt",Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     });
-
 
                }else {
 
                     tokenManager.deleteToken();
                 }
             }
-
-
 
             @Override
             public void onFailure(Call<OfferResponse> call, Throwable t) {
@@ -150,12 +153,10 @@ public class UserActivity extends AppCompatActivity {
 
         });
 
-
-
        }
 
-        public void modyPrice(int position,int quantity){
-            Toast.makeText(getApplicationContext(),String.valueOf(position),Toast.LENGTH_SHORT).show();
+        public void modyQuantity(int position,int quantity){
+
             Offer offer = ((Offer)this.gridView.getItemAtPosition(position));
             if(offer!=null)
                 offer.setQuantity(quantity);
@@ -173,7 +174,7 @@ public class UserActivity extends AppCompatActivity {
                 public void onResponse(Call<OfferResponse> call, Response<OfferResponse> response) {
 
 
-                    Log.w(TAG, "onResponse: " + response.body().getData().get(0).getName());
+
                     Toast.makeText(getApplicationContext(), call.request().toString(), Toast.LENGTH_LONG).show();
                     Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
 
