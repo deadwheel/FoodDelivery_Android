@@ -67,14 +67,14 @@ public class GridOfferAdapter extends BaseAdapter
         offerName.setText(offers.get(position).getName());
         price.setText(String.valueOf(offers.get(position).getPrice()));
 
+
         return gridView;
 
 
     }
 
-    public List<Offer> offers(){
 
-        return offers;
 
-    }
+
+
 }

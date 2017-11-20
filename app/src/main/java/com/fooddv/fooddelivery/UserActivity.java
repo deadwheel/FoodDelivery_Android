@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fooddv.fooddelivery.fragments.OfferItemDialog;
+import com.fooddv.fooddelivery.fragments.OrderDialog;
 import com.fooddv.fooddelivery.models.Adress;
 import com.fooddv.fooddelivery.models.Offer;
 import com.fooddv.fooddelivery.models.OrderAddress;
@@ -37,17 +38,15 @@ public class UserActivity extends AppCompatActivity {
     ApiService service;
     TokenManager tokenManager;
     Call<OfferResponse> call;
-    int a=0;
-    String s;
     Call<OfferResponse> callOffer;
     GridView gridView;
     GridOfferAdapter adapter;
+    View v;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         ButterKnife.bind(this);
-
 
        tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
 
@@ -60,9 +59,7 @@ public class UserActivity extends AppCompatActivity {
 
         getOffers();
 
-
     }
-
 
        public void getOffers(){
 
@@ -75,7 +72,6 @@ public class UserActivity extends AppCompatActivity {
 
                     final OfferResponse rsp = response.body();
                     final List<Offer> offers = response.body().getData();
-                    a=0;
 
                     UserActivity.this.gridView = (GridView)findViewById(R.id.gridOffer);
                     gridView.setChoiceMode(gridView.CHOICE_MODE_MULTIPLE);
@@ -85,10 +81,9 @@ public class UserActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             View gridView = view;
                             new OfferItemDialog().newInstance(position).show(getSupportFragmentManager(),"Ilosc");
-                            TextView quantity = (TextView)gridView.findViewById(R.id.textViewOfferQuantity);
-                           if(s!=null) {
-                               quantity.setText(s);
-                           }
+                            UserActivity.this.v = gridView;
+
+
                         }
                     });
 
@@ -104,7 +99,7 @@ public class UserActivity extends AppCompatActivity {
                             final SparseBooleanArray checked = gridView.getCheckedItemPositions();
 
                             List<Offer> bucket = new ArrayList<>();
-
+                            Toast.makeText(getApplicationContext(),String.valueOf(bucket.size()),Toast.LENGTH_SHORT).show();
                                 for (int i = 0; i < gridView.getCount(); i++) {
 
                                     if (checked.get(i)) {
@@ -115,23 +110,21 @@ public class UserActivity extends AppCompatActivity {
                                             offers.get(i).setOffer_id(offers.get(i).getId());
                                             bucket.add(offers.get(i));
                                         }
-
                                     }
                                 }
-
 
                             Call<OfferResponse> call;
 
                             Map<String, Object> map = new HashMap<String, Object>();
 
-                             map.put("order_details", bucket);
+                            map.put("order_details", bucket);
 
-                            Toast.makeText(getApplicationContext(),String.valueOf(bucket.size()),Toast.LENGTH_SHORT).show();
 
                             if(bucket.size() > 0){
+
                                   checked.clear();
-                                  bucket.clear();
-                                  makeOrder(map);
+                                  new OrderDialog().newInstance(map).show(getSupportFragmentManager(),"");
+
 
                         }else {
 
@@ -157,6 +150,8 @@ public class UserActivity extends AppCompatActivity {
 
         public void modyQuantity(int position,int quantity){
 
+            TextView v = (TextView)this.v.findViewById(R.id.textViewOfferQuantity);
+            v.setText(String.valueOf(quantity));
             Offer offer = ((Offer)this.gridView.getItemAtPosition(position));
             if(offer!=null)
                 offer.setQuantity(quantity);
@@ -173,27 +168,18 @@ public class UserActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<OfferResponse> call, Response<OfferResponse> response) {
 
-
-
                     Toast.makeText(getApplicationContext(), call.request().toString(), Toast.LENGTH_LONG).show();
                     Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
 
                     if (response.isSuccessful()) {
                         Log.w(TAG, "succesfullResp " + response);
-
                     }
-
                 }
 
                 @Override
                 public void onFailure(Call<OfferResponse> call, Throwable t) {
                     Log.w(TAG, "onFailure: " + t.getMessage());
-
                 }
             });
-
-
         }
-
-
 }
