@@ -20,6 +20,8 @@ import com.fooddv.fooddelivery.R;
 import com.fooddv.fooddelivery.UserActivity;
 import com.fooddv.fooddelivery.models.Offer;
 
+import java.io.Serializable;
+
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -79,6 +81,7 @@ public class OfferItemDialog extends DialogFragment {
                 });
         return builder.create();
     }
+
 
 
 }
