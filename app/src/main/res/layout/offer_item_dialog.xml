@@ -18,7 +18,6 @@
         android:layout_marginTop="50dp"
         android:ems="10"
         android:inputType="number"
-        android:text="0"
         android:hint="Podaj ilość"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

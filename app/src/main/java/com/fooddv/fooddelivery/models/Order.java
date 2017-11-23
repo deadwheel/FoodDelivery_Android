@@ -12,6 +12,22 @@ import java.util.List;
 
 public class Order {
 
-      private String location;
+      private List<Offer> offers;
+      private int order_id;
 
+      public List<Offer> getOffers() {
+            return offers;
+      }
+
+      public void setOffers(List<Offer> offers) {
+            this.offers = offers;
+      }
+
+      public int getOrder_id() {
+            return order_id;
+      }
+
+      public void setOrder_id(int order_id) {
+            this.order_id = order_id;
+      }
 }

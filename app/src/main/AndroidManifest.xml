@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fooddv.fooddelivery">
 
+    <!-- for card.io card scanning -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <!-- for most things, including card.io & paypal -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -17,6 +30,7 @@
             android:name="com.fooddv.fooddelivery.UserActivity"
             android:label="@string/title_activity_user"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
 
 
         <activity android:name="com.fooddv.fooddelivery.RegisterActivity" />

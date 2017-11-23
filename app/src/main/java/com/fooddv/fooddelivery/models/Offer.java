@@ -2,13 +2,17 @@ package com.fooddv.fooddelivery.models;
 
 import com.squareup.moshi.Json;
 
-public class Offer {
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+public class Offer implements Serializable{
 
     int id;
     int offer_id;
     String name;
     String description;
     double price;
+
     int quantity;
 
     public Offer(int id, String name, String desc, double price, int quantity) {
@@ -67,5 +71,23 @@ public class Offer {
 
     public void setOffer_id(int offer_id) {
         this.offer_id = offer_id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Offer)) return false;
+
+        Offer offer = (Offer) o;
+
+        if (id != offer.id) return false;
+        return name.equals(offer.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + name.hashCode();
+        return result;
     }
 }
