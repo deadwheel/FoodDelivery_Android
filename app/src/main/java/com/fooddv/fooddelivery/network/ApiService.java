@@ -1,6 +1,7 @@
 package com.fooddv.fooddelivery.network;
 
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 
 import retrofit2.http.Body;
@@ -13,9 +14,13 @@ import com.fooddv.fooddelivery.models.AccessToken;
 import com.fooddv.fooddelivery.models.Offer;
 import com.fooddv.fooddelivery.models.Order;
 import com.fooddv.fooddelivery.models.Response.OfferResponse;
+import com.fooddv.fooddelivery.models.Response.PaymentResponse;
+import com.fooddv.fooddelivery.models.Response.TestResponse;
 
 import java.util.List;
 import java.util.Map;
+
+import static android.R.attr.id;
 
 public interface ApiService {
 
@@ -37,11 +42,14 @@ public interface ApiService {
     @GET("offers")
     Call<OfferResponse> offers();
 
+    @POST("verifyPayment")
+    @FormUrlEncoded
+    Call<PaymentResponse> verify(@Field("paymentId") String paymentId, @Field("paymentClientJson") String paymentClientJson);
 
     @Headers({"Accept: application/json",
             "Content-Type: application/json"})
     @POST("orders")
-    Call<OfferResponse> orders(@Body Map<String, Object> order );
+    Call<TestResponse> orders(@Body Map<String, Object> order );
 
 
 

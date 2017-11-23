@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.fooddv.fooddelivery.R;
 import com.fooddv.fooddelivery.UserActivity;
+import com.fooddv.fooddelivery.models.Offer;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -24,12 +25,12 @@ import java.util.Map;
 
 public class OrderDialog extends DialogFragment {
 
-    public static OrderDialog newInstance(Map<String, Object> map) {
+    public static OrderDialog newInstance(ClearBasketAdapter listener) {
 
         OrderDialog f = new OrderDialog();
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putSerializable("map", (HashMap<String,Object>)map);
+        args.putSerializable("listener",listener);
 
         f.setArguments(args);
 
@@ -46,16 +47,19 @@ public class OrderDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         final View myView = inflater.inflate(R.layout.order_dialog, null);
-        final Map<String,Object> map = (HashMap<String,Object>)getArguments().getSerializable("map");
-               // Inflate and set the layout for the dialog
+        final ClearBasketAdapter clear = (ClearBasketAdapter)getArguments().getSerializable("listener");
+        // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setTitle("Zamawiam:");
         builder.setView(myView);
         // Add action buttons
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.Zaplac, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                ((UserActivity)getActivity()).makeOrder(map);
+
+                ((UserActivity)getActivity()).launchPayPalPayment();
+                clear.clear();
+
             }
         })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -64,6 +68,12 @@ public class OrderDialog extends DialogFragment {
                     }
                 });
         return builder.create();
+    }
+
+    public interface ClearBasketAdapter extends Serializable{
+
+        public void clear();
+
     }
 
 }

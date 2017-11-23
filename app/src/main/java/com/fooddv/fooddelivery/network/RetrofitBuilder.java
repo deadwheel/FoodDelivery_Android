@@ -15,15 +15,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 import com.fooddv.fooddelivery.TokenManager;
 import com.fooddv.fooddelivery.BuildConfig;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class RetrofitBuilder {
 
-    private static final String BASE_URL = "http://192.168.0.100/pd3/public/api/";
+    private static final String BASE_URL = "http://192.168.0.100/pd4/public/api/";
 
     private final static OkHttpClient client = buildClient();
     private final static Retrofit retrofit = buildRetrofit(client);
     private static TokenManager token;
-
 
 
     private static OkHttpClient buildClient(){
@@ -33,7 +33,6 @@ public class RetrofitBuilder {
 
 
 // add your other interceptors …
-
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
@@ -65,6 +64,7 @@ public class RetrofitBuilder {
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(MoshiConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 

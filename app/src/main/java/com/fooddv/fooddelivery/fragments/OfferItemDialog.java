@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fooddv.fooddelivery.OfferRecyklerAdapter;
 import com.fooddv.fooddelivery.R;
 import com.fooddv.fooddelivery.UserActivity;
 import com.fooddv.fooddelivery.models.Offer;
@@ -30,12 +31,16 @@ import static android.app.Activity.RESULT_OK;
 
 public class OfferItemDialog extends DialogFragment {
 
-    public static OfferItemDialog newInstance(int position) {
+
+    public static OfferItemDialog newInstance(Offer offer, OfferAdapterListener listener, OfferRecyklerAdapter.OfferViewHolder holder) {
 
         OfferItemDialog f = new OfferItemDialog();
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putInt("position", position);
+        args.putSerializable("offer", offer);
+        args.putSerializable("listener",listener);
+        args.putSerializable("holder",holder);
+
         f.setArguments(args);
 
         return f;
@@ -46,13 +51,15 @@ public class OfferItemDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         final View myView = inflater.inflate(R.layout.offer_item_dialog, null);
 
-        final int position = getArguments().getInt("position");
+        final Offer offer = (Offer)getArguments().getSerializable("offer");
+        final OfferAdapterListener listener = (OfferAdapterListener)getArguments().getSerializable("listener");
+        final OfferRecyklerAdapter.OfferViewHolder holder = (OfferRecyklerAdapter.OfferViewHolder)getArguments().getSerializable("holder");
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setTitle("Wpisz ilość:");
@@ -61,17 +68,29 @@ public class OfferItemDialog extends DialogFragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+
                           EditText quantity = (EditText)myView.findViewById(R.id.editTextOfferDialogQuantity);
 
                             try {
 
-                               ((UserActivity) getActivity()).modyQuantity(position, Integer.parseInt(quantity.getText().toString()));
+                                offer.setQuantity(Integer.parseInt(quantity.getText().toString()));
+
+                                if(offer.getQuantity() > 0) {
+                                    listener.execute(offer);
+                                    holder.bt.setText("KUP" + "(" + String.valueOf(offer.getQuantity()) + ")");
+                                }else {
+                                    holder.bt.setText("KUP");
+                                    Toast.makeText(getContext(),"Ilośc musi być większa niż 0",Toast.LENGTH_SHORT).show();
+                                }
 
                             }catch(NumberFormatException msg){
 
                                 Toast.makeText(getContext(),msg.getMessage(),Toast.LENGTH_SHORT).show();
 
                             }
+
+
+
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -82,6 +101,10 @@ public class OfferItemDialog extends DialogFragment {
         return builder.create();
     }
 
+        public interface OfferAdapterListener extends Serializable{
 
+            public void execute(Offer offer);
+
+        }
 
 }
