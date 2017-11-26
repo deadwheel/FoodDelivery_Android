@@ -6,18 +6,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
+import com.fooddv.fooddelivery.BasketListener;
+import com.fooddv.fooddelivery.DialogRecyclerView;
+import com.fooddv.fooddelivery.OfferActivity;
+import com.fooddv.fooddelivery.OfferRecyklerAdapter;
 import com.fooddv.fooddelivery.R;
-import com.fooddv.fooddelivery.UserActivity;
-import com.fooddv.fooddelivery.models.Offer;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by vr on 2017-11-19.
@@ -25,7 +24,7 @@ import java.util.Map;
 
 public class OrderDialog extends DialogFragment {
 
-    public static OrderDialog newInstance(ClearBasketAdapter listener) {
+    public static OrderDialog newInstance(BasketListener listener) {
 
         OrderDialog f = new OrderDialog();
         // Supply num input as an argument.
@@ -47,18 +46,24 @@ public class OrderDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         final View myView = inflater.inflate(R.layout.order_dialog, null);
-        final ClearBasketAdapter clear = (ClearBasketAdapter)getArguments().getSerializable("listener");
+        BasketListener listener = (BasketListener) getArguments().getSerializable("listener");
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setTitle("Zamawiam:");
+
+
+        RecyclerView recyclerView = (RecyclerView) myView.findViewById(R.id.recycler_view_offer_dialog);
+        DialogRecyclerView dialogRecyklerAdapter = new DialogRecyclerView(getActivity(),listener.getBasket());
+        recyclerView.setAdapter(dialogRecyklerAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         builder.setView(myView);
         // Add action buttons
         builder.setPositiveButton(R.string.Zaplac, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
 
-                ((UserActivity)getActivity()).launchPayPalPayment();
-                clear.clear();
+                ((OfferActivity)getActivity()).launchPayPalPayment();
+                //clear.clear();
 
             }
         })
@@ -70,10 +75,6 @@ public class OrderDialog extends DialogFragment {
         return builder.create();
     }
 
-    public interface ClearBasketAdapter extends Serializable{
 
-        public void clear();
-
-    }
 
 }

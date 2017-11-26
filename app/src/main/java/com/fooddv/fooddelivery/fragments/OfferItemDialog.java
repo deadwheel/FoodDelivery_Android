@@ -1,29 +1,20 @@
 package com.fooddv.fooddelivery.fragments;
 
 import android.app.Dialog;
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fooddv.fooddelivery.BasketListener;
 import com.fooddv.fooddelivery.OfferRecyklerAdapter;
 import com.fooddv.fooddelivery.R;
-import com.fooddv.fooddelivery.UserActivity;
 import com.fooddv.fooddelivery.models.Offer;
-
-import java.io.Serializable;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by vr on 2017-11-19.
@@ -32,7 +23,7 @@ import static android.app.Activity.RESULT_OK;
 public class OfferItemDialog extends DialogFragment {
 
 
-    public static OfferItemDialog newInstance(Offer offer, OfferAdapterListener listener, OfferRecyklerAdapter.OfferViewHolder holder) {
+    public static OfferItemDialog newInstance(Offer offer, BasketListener listener, OfferRecyklerAdapter.OfferViewHolder holder) {
 
         OfferItemDialog f = new OfferItemDialog();
         // Supply num input as an argument.
@@ -58,7 +49,7 @@ public class OfferItemDialog extends DialogFragment {
         final View myView = inflater.inflate(R.layout.offer_item_dialog, null);
 
         final Offer offer = (Offer)getArguments().getSerializable("offer");
-        final OfferAdapterListener listener = (OfferAdapterListener)getArguments().getSerializable("listener");
+        final BasketListener listener = (BasketListener) getArguments().getSerializable("listener");
         final OfferRecyklerAdapter.OfferViewHolder holder = (OfferRecyklerAdapter.OfferViewHolder)getArguments().getSerializable("holder");
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
@@ -76,21 +67,18 @@ public class OfferItemDialog extends DialogFragment {
                                 offer.setQuantity(Integer.parseInt(quantity.getText().toString()));
 
                                 if(offer.getQuantity() > 0) {
-                                    listener.execute(offer);
-                                    holder.bt.setText("KUP" + "(" + String.valueOf(offer.getQuantity()) + ")");
+                                    listener.addOfferToBasket(offer);
+                                    holder.bt.setText("ZMIEN" + "(" + String.valueOf(offer.getQuantity()) + ")");
+
                                 }else {
                                     holder.bt.setText("KUP");
+                                    listener.removeOfferFromBasket(offer);
                                     Toast.makeText(getContext(),"Ilośc musi być większa niż 0",Toast.LENGTH_SHORT).show();
                                 }
 
                             }catch(NumberFormatException msg){
-
                                 Toast.makeText(getContext(),msg.getMessage(),Toast.LENGTH_SHORT).show();
-
                             }
-
-
-
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -101,10 +89,6 @@ public class OfferItemDialog extends DialogFragment {
         return builder.create();
     }
 
-        public interface OfferAdapterListener extends Serializable{
 
-            public void execute(Offer offer);
-
-        }
 
 }

@@ -69,7 +69,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if(tokenManager.getToken().getAccessToken() != null){
 
-                       startActivity(new Intent(LoginActivity.this, UserActivity.class));
+                       startActivity(new Intent(LoginActivity.this, OfferActivity.class));
+         ///   startActivity(new Intent(LoginActivity.this, UserActivity.class));
 
             finish();
         }
@@ -110,9 +111,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     Toast.makeText(LoginActivity.this,tokenManager.getToken().getRoleID(),Toast.LENGTH_LONG).show();
                     if (response.isSuccessful()) {
-                        startActivity(new Intent(LoginActivity.this, UserActivity.class));
+
                          tokenManager.saveToken(response.body());
-                         startActivity(new Intent(LoginActivity.this, UserActivity.class));
+                         startActivity(new Intent(LoginActivity.this, OfferActivity.class));
 
 
                          finish();

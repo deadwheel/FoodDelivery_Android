@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         setupRules();
 
         if(tokenManager.getToken().getAccessToken() != null){
-            startActivity(new Intent(RegisterActivity.this, UserActivity.class));
+            startActivity(new Intent(RegisterActivity.this, OfferActivity.class));
             finish();
         }
     }
@@ -85,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         Log.w(TAG, "onResponse: " + response.body() );
                         tokenManager.saveToken(response.body());
-                        startActivity(new Intent(RegisterActivity.this, UserActivity.class));
+                        startActivity(new Intent(RegisterActivity.this, OfferActivity.class));
                         finish();
                     } else {
                         handleErrors(response.errorBody());

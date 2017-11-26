@@ -1,7 +1,12 @@
 package com.fooddv.fooddelivery;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.concurrent.Callable;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -24,11 +29,6 @@ public class Utils {
         return apiError;
     }
 
-    /**
-     * Created by vr on 2017-10-27.
-     */
 
-    public static class OffersFragment {
-    }
 }
 

@@ -9,13 +9,12 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class OfferResponse{
+public class OfferResponse implements Response{
 
     List<Offer> data;
 
     public List<Offer> getData() {
         return data;
     }
-
 
 }
