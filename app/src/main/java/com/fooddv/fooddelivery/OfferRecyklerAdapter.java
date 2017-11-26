@@ -1,6 +1,7 @@
 package com.fooddv.fooddelivery;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +22,15 @@ import java.util.List;
  * Created by vr on 2017-11-21.
  */
 
-public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdapter.OfferViewHolder> implements OfferItemDialog.OfferAdapterListener{
+public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdapter.OfferViewHolder> {
 
     private Context context;
 
     private List<Offer> offers;
     private LayoutInflater inflater;
-    private BasketAdapterListener listener;
+    private BasketListener listener;
 
-    public OfferRecyklerAdapter(Context context, List<Offer> offers, BasketAdapterListener listener) {
+    public OfferRecyklerAdapter(Context context, List<Offer> offers, BasketListener listener) {
         this.context = context;
         this.offers = offers;
         this.listener = listener;
@@ -51,12 +52,11 @@ public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdap
 
     }
 
-
-
     @Override
     public void onBindViewHolder(OfferViewHolder holder, int position) {
+
         final int p = position;
-        final OfferRecyklerAdapter root = this;
+
 
         final OfferViewHolder myViewHolder = holder;
 
@@ -68,7 +68,7 @@ public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdap
             public void onClick(View v) {
 
                 OfferItemDialog dialog =  new OfferItemDialog();
-                dialog.newInstance(offers.get(p),root,myViewHolder).show(((UserActivity)context).getSupportFragmentManager(),"");
+                dialog.newInstance(offers.get(p), listener, myViewHolder).show(((OfferActivity)context).getSupportFragmentManager(),"");
 
             }
         });
@@ -80,12 +80,6 @@ public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdap
         return offers.size();
     }
 
-    @Override
-    public void execute(Offer offer) {
-        listener.addOfferToBasket(offer);
-
-
-    }
 
     @Override
     public int getItemViewType(int position) {
@@ -98,6 +92,7 @@ public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdap
         public Button bt;
 
         public OfferViewHolder(View itemView) {
+
             super(itemView);
 
              offerName = (TextView)itemView.findViewById(R.id.textViewOfferName);
@@ -107,7 +102,7 @@ public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdap
         }
     }
 
-    interface BasketAdapterListener {
-        public void addOfferToBasket(Offer offer);
-    }
+
+
+
 }

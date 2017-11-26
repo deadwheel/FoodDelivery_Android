@@ -8,7 +8,7 @@ import java.util.List;
  * Created by vr on 2017-11-21.
  */
 
-public class TestResponse {
+public class TestResponse implements Response {
 
     Order data;
     public Order getData() {

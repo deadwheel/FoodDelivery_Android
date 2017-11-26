@@ -3,21 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="D:\FoodDelivery_Android-master\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jar="/home/damian/Projekty/Android studio/FoodDelivery_Android-master/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.3"
         sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="D:\FoodDelivery_Android-master\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_9038ece362d6b32ee50dd2d7eb9a34b78d4c3f19\classes.dex" />
+        <dex dex="/home/damian/Projekty/Android studio/FoodDelivery_Android-master/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_9e6362efe606f0aaa2eb8958503b2ed254308576/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="D:\FoodDelivery_Android-master\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jar="/home/damian/Projekty/Android studio/FoodDelivery_Android-master/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.3"
-        sha1="e76cfeca7f1d3e52d6443a9c06392771e41dfe97">
-        <dex dex="D:\FoodDelivery_Android-master\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_d679516e69b07d4597bee3f64eb7e18a39d2c736\classes.dex" />
+        sha1="008b1de5521a28df18c080523c0da390a8ff288f">
+        <dex dex="/home/damian/Projekty/Android studio/FoodDelivery_Android-master/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_29bc04398f5b13835bcebd3f9625d09a2e4ca6ad/classes.dex" />
     </item>
 
 </items>

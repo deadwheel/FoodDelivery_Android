@@ -16,4 +16,12 @@
     <string name="ok">ok</string>
     <string name="cancel">cancel</string>
     <string name="Zaplac">zaplac</string>
+    <string name="action_settings">setting</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="logout_message">Czy napewno chcesz się wylogować?</string>
+    <string name="title_activity_tabbed">TabbedActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_offer_tabs">OfferTabsActivity</string>
+    <string name="title_activity_tabs">TabsActivity</string>
 </resources>
