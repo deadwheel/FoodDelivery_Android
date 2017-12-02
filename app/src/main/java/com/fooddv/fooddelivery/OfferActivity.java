@@ -168,7 +168,7 @@ public class OfferActivity extends BaseActivity implements BasketListener {
 
         this.mHandler = new Handler();
 
-        this.mHandler.postDelayed(m_Runnable,1000);
+        this.mHandler.postDelayed(m_Runnable,1000000);
 
         getOffers();
     }
@@ -379,7 +379,7 @@ public class OfferActivity extends BaseActivity implements BasketListener {
 
             getOffers();
 
-            OfferActivity.this.mHandler.postDelayed(m_Runnable, 1000);
+            OfferActivity.this.mHandler.postDelayed(m_Runnable, 100000);
         }
 
     };//runnable

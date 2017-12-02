@@ -13,5 +13,4 @@ public class MainActivity extends Application {
         super.onCreate();
     }
 
-
 }

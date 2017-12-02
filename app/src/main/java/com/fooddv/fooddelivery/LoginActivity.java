@@ -69,8 +69,20 @@ public class LoginActivity extends AppCompatActivity {
 
         if(tokenManager.getToken().getAccessToken() != null){
 
-                       startActivity(new Intent(LoginActivity.this, OfferActivity.class));
-         ///   startActivity(new Intent(LoginActivity.this, UserActivity.class));
+                    if(tokenManager.getToken().getRoleID().equals("1")) {
+
+                        String dupa = tokenManager.getToken().getRoleID();
+                        startActivity(new Intent(LoginActivity.this, DelivererActivity.class));
+
+                    }
+
+                    else {
+
+
+
+                        startActivity(new Intent(LoginActivity.this, OfferActivity.class));
+
+                    }
 
             finish();
         }
