@@ -12,6 +12,33 @@ public class Offer implements Serializable{
     String name;
     String description;
     double price;
+    String image;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Offer(int id, int offer_id, String name, String description, double price, String image, int quantity) {
+        this.id = id;
+        this.offer_id = offer_id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.image = image;
+        this.quantity = quantity;
+    }
 
     int quantity;
 

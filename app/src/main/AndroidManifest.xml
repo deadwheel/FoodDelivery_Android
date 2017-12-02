@@ -3,6 +3,8 @@
     package="com.fooddv.fooddelivery">
 
     <!-- for card.io card scanning -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -16,6 +18,8 @@
     <!-- for most things, including card.io & paypal -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".MainActivity"
@@ -28,6 +32,12 @@
         <activity android:name=".BaseActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".OfferActivity"/>
+        <service android:name=".services.LocationService" />
+        <activity android:name=".DelivererActivity" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <activity android:name=".ActiveOrder" />
         <activity android:name=".LoginActivity">
 
             <intent-filter>

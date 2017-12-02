@@ -65,6 +65,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             finish();
         }
 
+
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
 
     }
@@ -107,6 +108,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             case R.id.action_logout: {
                 makeLogoutDialog("Wylogowywanie");
               }
+                break;
+
+            case R.id.action_orders:
+                Intent myIntent = new Intent(BaseActivity.this, DelivererActivity.class);
+                BaseActivity.this.startActivity(myIntent);
+                break;
+
+            case R.id.action_active_orders:
+                Intent myIntent_2 = new Intent(BaseActivity.this, ActiveOrder.class);
+                BaseActivity.this.startActivity(myIntent_2);
                 break;
 
         }
