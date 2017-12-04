@@ -3,8 +3,6 @@
     package="com.fooddv.fooddelivery">
 
     <!-- for card.io card scanning -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -33,11 +31,11 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".OfferActivity"/>
         <service android:name=".services.LocationService" />
-        <activity android:name=".DelivererActivity" />
+        <activity android:name=".DriverOrdersActivity" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".ActiveOrder" />
+        <activity android:name=".DriverOrderActiveActivity" />
         <activity android:name=".LoginActivity">
 
             <intent-filter>

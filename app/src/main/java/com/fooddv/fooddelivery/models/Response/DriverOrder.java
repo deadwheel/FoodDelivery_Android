@@ -1,24 +1,20 @@
 package com.fooddv.fooddelivery.models.Response;
 
-import com.fooddv.fooddelivery.models.Offer;
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Denis on 2017-11-27.
  */
 
-public class dupa implements Serializable {
+public class DriverOrder implements Serializable {
 
     private int id,deliverer_id;
     private double price;
     private String address;
-    private List<Offer2> det;
+    private List<DriverOrderOffer> det;
 
-    public dupa() {
+    public DriverOrder() {
 
 
     }
@@ -55,15 +51,15 @@ public class dupa implements Serializable {
         this.address = address;
     }
 
-    public List<Offer2> getDet() {
+    public List<DriverOrderOffer> getDet() {
         return det;
     }
 
-    public void setDet(List<Offer2> det) {
+    public void setDet(List<DriverOrderOffer> det) {
         this.det = det;
     }
 
-    public dupa(int id, int deliverer_id, double price, String address, List<Offer2> det) {
+    public DriverOrder(int id, int deliverer_id, double price, String address, List<DriverOrderOffer> det) {
         this.id = id;
         this.deliverer_id = deliverer_id;
         this.price = price;

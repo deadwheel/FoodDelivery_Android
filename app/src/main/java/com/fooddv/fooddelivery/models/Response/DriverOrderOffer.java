@@ -8,11 +8,15 @@ import java.io.Serializable;
  * Created by Denis on 2017-11-28.
  */
 
-public class Offer2 implements Serializable {
+public class DriverOrderOffer implements Serializable {
 
     private int offer_id;
     private int quantity;
     private Offer offer_det;
+
+    public DriverOrderOffer() {
+
+    }
 
     public int getOffer_id() {
         return offer_id;
@@ -38,7 +42,7 @@ public class Offer2 implements Serializable {
         this.offer_det = offer_det;
     }
 
-    public Offer2(int offer_id, int quantity, Offer offer_det) {
+    public DriverOrderOffer(int offer_id, int quantity, Offer offer_det) {
         this.offer_id = offer_id;
         this.quantity = quantity;
         this.offer_det = offer_det;

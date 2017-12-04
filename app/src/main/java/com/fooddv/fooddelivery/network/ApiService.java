@@ -1,10 +1,8 @@
 package com.fooddv.fooddelivery.network;
 
 
-import io.reactivex.Observable;
 import retrofit2.Call;
 
-import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -14,21 +12,14 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 import com.fooddv.fooddelivery.models.AccessToken;
-import com.fooddv.fooddelivery.models.Offer;
-import com.fooddv.fooddelivery.models.Order;
-import com.fooddv.fooddelivery.models.Response.DriverTakeItResponse;
+import com.fooddv.fooddelivery.models.Response.DriverSimpleResponse;
 import com.fooddv.fooddelivery.models.Response.OfferResponse;
 import com.fooddv.fooddelivery.models.Response.PaymentResponse;
-import com.fooddv.fooddelivery.models.Response.Response;
 import com.fooddv.fooddelivery.models.Response.TestResponse;
-import com.fooddv.fooddelivery.models.Response.drive_order;
-import com.fooddv.fooddelivery.models.Response.driver_order_2;
-import com.fooddv.fooddelivery.models.Response.dupa;
+import com.fooddv.fooddelivery.models.Response.DriverOrders;
+import com.fooddv.fooddelivery.models.Response.DriverOrderActive;
 
-import java.util.List;
 import java.util.Map;
-
-import static android.R.attr.id;
 
 public interface ApiService {
 
@@ -51,18 +42,24 @@ public interface ApiService {
     Call<OfferResponse> offers();
 
     @GET("driver/orders/")
-    Call<drive_order> GetDriverOffers();
+    Call<DriverOrders> GetDriverOrders();
 
     @POST("driver/take_it/{id}")
-    Call<DriverTakeItResponse> take_it(@Path("id") int id);
+    Call<DriverSimpleResponse> take_it(@Path("id") int id);
+
+    @POST("driver/cancel_it/{id}")
+    Call<DriverSimpleResponse> cancel_it(@Path("id") int id);
+
+    @POST("driver/end_it/{id}")
+    Call<DriverSimpleResponse> end_it(@Path("id") int id);
 
     @FormUrlEncoded
     @POST("driver/update_pos/{id}")
-    Call<DriverTakeItResponse> update_pos(@Path("id") int id, @Field("position") String position);
+    Call<DriverSimpleResponse> update_pos(@Path("id") int id, @Field("position") String position);
 
 
     @GET("driver/orders/active/")
-    Call<driver_order_2> get_active();
+    Call<DriverOrderActive> get_active();
 
     @POST("verifyPayment")
     @FormUrlEncoded

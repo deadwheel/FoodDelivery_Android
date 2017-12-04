@@ -12,10 +12,10 @@ import java.util.Set;
 
 public interface BasketListener extends Serializable {
 
-    public void addOfferToBasket(Offer offer);
-    public void removeOfferFromBasket(Offer offer);
-    public void clearBasket();
-    public List<Offer> getBasket();
+    void addOfferToBasket(Offer offer);
+    void removeOfferFromBasket(Offer offer);
+    void clearBasket();
+    List<Offer> getBasket();
 
 
 }

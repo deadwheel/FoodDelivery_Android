@@ -68,7 +68,7 @@ public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdap
             public void onClick(View v) {
 
                 OfferItemDialog dialog =  new OfferItemDialog();
-                dialog.newInstance(offers.get(p), listener, myViewHolder).show(((OfferActivity)context).getSupportFragmentManager(),"");
+                OfferItemDialog.newInstance(offers.get(p), listener, myViewHolder).show(((OfferActivity)context).getSupportFragmentManager(),"");
 
             }
         });

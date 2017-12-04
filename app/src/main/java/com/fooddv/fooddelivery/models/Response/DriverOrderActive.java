@@ -1,24 +1,22 @@
 package com.fooddv.fooddelivery.models.Response;
 
-import java.util.List;
-
 /**
  * Created by Denis on 2017-12-02.
  */
 
-public class driver_order_2 {
+public class DriverOrderActive {
 
-    private dupa data;
+    private DriverOrder data;
 
-    public driver_order_2(dupa data) {
+    public DriverOrderActive(DriverOrder data) {
         this.data = data;
     }
 
-    public dupa getData() {
+    public DriverOrder getData() {
         return data;
     }
 
-    public void setData(dupa data) {
+    public void setData(DriverOrder data) {
         this.data = data;
     }
 }

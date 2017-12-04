@@ -251,7 +251,7 @@ public class OfferActivity extends BaseActivity implements BasketListener {
                             if(basket.size() > 0){
 
                                 OrderDialog dialog =  new OrderDialog();
-                                dialog.newInstance(OfferActivity.this).show(getSupportFragmentManager(),"");
+                                OrderDialog.newInstance(OfferActivity.this).show(getSupportFragmentManager(),"");
 
                             }else {
                                 Toast.makeText(getApplicationContext(),"Musisz wybrać conajmniej 1 produkt",Toast.LENGTH_SHORT).show();

@@ -6,6 +6,6 @@ package com.fooddv.fooddelivery.models.Response;
 
 public interface Response {
 
-     public Object getData();
+     Object getData();
 
 }

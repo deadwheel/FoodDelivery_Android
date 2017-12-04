@@ -4,11 +4,11 @@ package com.fooddv.fooddelivery.models.Response;
  * Created by Denis on 2017-11-28.
  */
 
-public class DriverTakeItResponse {
+public class DriverSimpleResponse {
 
     private String success, error;
 
-    public DriverTakeItResponse(String success, String error) {
+    public DriverSimpleResponse(String success, String error) {
         this.success = success;
         this.error = error;
     }
