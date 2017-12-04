@@ -3,11 +3,9 @@ package com.fooddv.fooddelivery.services;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -15,9 +13,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.fooddv.fooddelivery.ActiveOrder;
 import com.fooddv.fooddelivery.TokenManager;
-import com.fooddv.fooddelivery.models.Response.DriverTakeItResponse;
+import com.fooddv.fooddelivery.models.Response.DriverSimpleResponse;
 import com.fooddv.fooddelivery.network.ApiService;
 import com.fooddv.fooddelivery.network.RetrofitBuilder;
 import com.google.android.gms.common.ConnectionResult;
@@ -55,7 +52,7 @@ public class LocationService extends Service implements com.google.android.gms.l
 
     protected ApiService service;
     protected TokenManager tokenManager;
-    private Call<DriverTakeItResponse> callTakeIt;
+    private Call<DriverSimpleResponse> callTakeIt;
 
     @Override
     public void onCreate() {
@@ -179,14 +176,14 @@ public class LocationService extends Service implements com.google.android.gms.l
             service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
 
             callTakeIt = service.update_pos(order_id, address);
-            callTakeIt.enqueue(new Callback<DriverTakeItResponse>() {
+            callTakeIt.enqueue(new Callback<DriverSimpleResponse>() {
                 @Override
-                public void onResponse(Call<DriverTakeItResponse> call, Response<DriverTakeItResponse> response) {
+                public void onResponse(Call<DriverSimpleResponse> call, Response<DriverSimpleResponse> response) {
 
 
                     if(response.isSuccessful()) {
 
-                        DriverTakeItResponse blabla = response.body();
+                        DriverSimpleResponse blabla = response.body();
                         Toast.makeText(getApplicationContext(), order_id + " " + blabla.getSuccess(), Toast.LENGTH_SHORT).show();
 
 
@@ -196,9 +193,9 @@ public class LocationService extends Service implements com.google.android.gms.l
                 }
 
                 @Override
-                public void onFailure(Call<DriverTakeItResponse> call, Throwable t) {
+                public void onFailure(Call<DriverSimpleResponse> call, Throwable t) {
 
-                    Toast.makeText(getApplicationContext(), order_id + "  dupa ! ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), order_id + "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
 
                 }
             });

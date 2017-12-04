@@ -3,6 +3,7 @@ package com.fooddv.fooddelivery.network;
 
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 
 import okhttp3.Interceptor;
@@ -36,6 +37,8 @@ public class RetrofitBuilder {
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(1,TimeUnit.MINUTES)
                 .addInterceptor(logging)
                 .addInterceptor(new Interceptor() {
                     @Override

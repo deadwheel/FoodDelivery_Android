@@ -31,7 +31,6 @@ import com.fooddv.fooddelivery.models.AccessToken;
 import com.fooddv.fooddelivery.models.ApiError;
 import com.fooddv.fooddelivery.network.ApiService;
 import com.fooddv.fooddelivery.network.RetrofitBuilder;
-import com.fooddv.fooddelivery.R;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -72,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(tokenManager.getToken().getRoleID().equals("1")) {
 
                         String dupa = tokenManager.getToken().getRoleID();
-                        startActivity(new Intent(LoginActivity.this, DelivererActivity.class));
+                        startActivity(new Intent(LoginActivity.this, DriverOrdersActivity.class));
 
                     }
 

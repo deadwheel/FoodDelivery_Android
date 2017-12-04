@@ -8,22 +8,15 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.fooddv.fooddelivery.models.*;
-import com.fooddv.fooddelivery.models.Response.TestResponse;
 import com.fooddv.fooddelivery.network.ApiService;
 import com.fooddv.fooddelivery.network.RetrofitBuilder;
 
@@ -111,12 +104,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.action_orders:
-                Intent myIntent = new Intent(BaseActivity.this, DelivererActivity.class);
+                Intent myIntent = new Intent(BaseActivity.this, DriverOrdersActivity.class);
                 BaseActivity.this.startActivity(myIntent);
                 break;
 
             case R.id.action_active_orders:
-                Intent myIntent_2 = new Intent(BaseActivity.this, ActiveOrder.class);
+                Intent myIntent_2 = new Intent(BaseActivity.this, DriverOrderActiveActivity.class);
                 BaseActivity.this.startActivity(myIntent_2);
                 break;
 
@@ -129,7 +122,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         getSupportActionBar().setTitle(title);
 
-    };
+    }
 
     private void logout(){
 
