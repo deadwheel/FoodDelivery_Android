@@ -29,7 +29,12 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".BaseActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".OfferActivity"/>
+           <activity
+            android:name=".OfferActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".OrderUserActivity" />
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".BasketActivity"/>
         <service android:name=".services.LocationService" />
         <activity android:name=".DriverOrdersActivity" />
         <meta-data

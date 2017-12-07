@@ -15,4 +15,8 @@ public class Config {
     public static final String PAYPAL_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
     public static final String PAYMENT_INTENT = PayPalPayment.PAYMENT_INTENT_SALE;
     public static final String DEFAULT_CURRENCY = "PLN";
+
+    public static final String API_NOT_CONNECTED = "Google API not connected";
+    public static final String SOMETHING_WENT_WRONG = "OOPs!!! Something went wrong...";
+    public static String PlacesTag = "Google Places Auto Complete";
 }

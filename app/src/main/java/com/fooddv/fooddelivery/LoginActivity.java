@@ -16,6 +16,10 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.fooddv.fooddelivery.models.AccessToken;
+import com.fooddv.fooddelivery.models.ApiError;
+import com.fooddv.fooddelivery.network.ApiService;
+import com.fooddv.fooddelivery.network.RetrofitBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -27,10 +31,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.fooddv.fooddelivery.models.AccessToken;
-import com.fooddv.fooddelivery.models.ApiError;
-import com.fooddv.fooddelivery.network.ApiService;
-import com.fooddv.fooddelivery.network.RetrofitBuilder;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
 
                          tokenManager.saveToken(response.body());
-                         startActivity(new Intent(LoginActivity.this, OfferActivity.class));
+                         startActivity(new Intent(LoginActivity.this, DriverOrdersActivity.class));
 
 
                          finish();

@@ -1,14 +1,11 @@
 package com.fooddv.fooddelivery.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.squareup.moshi.Json;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Offer implements Serializable {
+public class Offer implements Serializable{
 
     int id;
     int offer_id;
@@ -16,7 +13,6 @@ public class Offer implements Serializable {
     String description;
     double price;
     String image;
-
 
     public String getDescription() {
         return description;
@@ -121,6 +117,4 @@ public class Offer implements Serializable {
         result = 31 * result + name.hashCode();
         return result;
     }
-
-
 }

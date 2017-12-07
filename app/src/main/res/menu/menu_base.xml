@@ -6,6 +6,26 @@
         android:title="Orders"/>
 
     <item
+        android:id="@+id/action_basket"
+        android:icon="@drawable/ic_shopping_cart_black"
+        android:title="Basket"/>
+
+    <item
+        android:id="@+id/action_offer"
+        android:icon="@drawable/ic_local_offer_black"
+        android:title="Offerts"/>
+
+    <item
+        android:id="@+id/user_order"
+        android:icon="@drawable/ic_local_offer_black"
+        android:title="UserOrders"/>
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_account_circle"
+        android:title="Profile"
+        />
+
+    <item
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_logout"
         android:title="Logout"/>

@@ -2,9 +2,11 @@ package com.fooddv.fooddelivery.network;
 
 
 
+import com.fooddv.fooddelivery.TokenManager;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -12,15 +14,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
-import com.fooddv.fooddelivery.TokenManager;
-import com.fooddv.fooddelivery.BuildConfig;
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class RetrofitBuilder {
 
-    private static final String BASE_URL = "http://192.168.0.100/fooddelivery/public/api/";
+    private static final String BASE_URL = "http://192.168.0.102/food_delivery2/public/api/";
 
     private final static OkHttpClient client = buildClient();
     private final static Retrofit retrofit = buildRetrofit(client);
