@@ -112,6 +112,22 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Intent myIntent_2 = new Intent(BaseActivity.this, DriverOrderActiveActivity.class);
                 BaseActivity.this.startActivity(myIntent_2);
                 break;
+	   case R.id.action_basket:
+                Intent basketActivity = new Intent(BaseActivity.this, BasketActivity.class);
+                BaseActivity.this.startActivity(basketActivity);
+                break;
+            case R.id.action_offer:
+                Intent offerActivity = new Intent(BaseActivity.this, OfferActivity.class);
+                BaseActivity.this.startActivity(offerActivity);
+                break;
+            case R.id.user_order:
+                Intent orderUserActivity = new Intent(BaseActivity.this, OrderUserActivity.class);
+                BaseActivity.this.startActivity(orderUserActivity);
+                break;
+            case R.id.action_profile:
+                Intent profileActivity = new Intent(BaseActivity.this, ProfileActivity.class);
+                BaseActivity.this.startActivity(profileActivity);
+                break;
 
         }
 

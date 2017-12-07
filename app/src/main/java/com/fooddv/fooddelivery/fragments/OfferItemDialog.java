@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.fooddv.fooddelivery.BasketListener;
 import com.fooddv.fooddelivery.OfferRecyklerAdapter;
 import com.fooddv.fooddelivery.R;
-import com.fooddv.fooddelivery.models.Offer;
 
 /**
  * Created by vr on 2017-11-19.
@@ -22,13 +21,12 @@ import com.fooddv.fooddelivery.models.Offer;
 
 public class OfferItemDialog extends DialogFragment {
 
-
-    public static OfferItemDialog newInstance(Offer offer, BasketListener listener, OfferRecyklerAdapter.OfferViewHolder holder) {
+    public static OfferItemDialog newInstance(int position, BasketListener listener, OfferRecyklerAdapter.OfferViewHolder holder) {
 
         OfferItemDialog f = new OfferItemDialog();
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putSerializable("offer", offer);
+        args.putInt("position", position);
         args.putSerializable("listener",listener);
         args.putSerializable("holder",holder);
 
@@ -48,7 +46,7 @@ public class OfferItemDialog extends DialogFragment {
 
         final View myView = inflater.inflate(R.layout.offer_item_dialog, null);
 
-        final Offer offer = (Offer)getArguments().getSerializable("offer");
+        final int position = getArguments().getInt("position");
         final BasketListener listener = (BasketListener) getArguments().getSerializable("listener");
         final OfferRecyklerAdapter.OfferViewHolder holder = (OfferRecyklerAdapter.OfferViewHolder)getArguments().getSerializable("holder");
         // Inflate and set the layout for the dialog
@@ -64,16 +62,21 @@ public class OfferItemDialog extends DialogFragment {
 
                             try {
 
-                                offer.setQuantity(Integer.parseInt(quantity.getText().toString()));
+                            int q = Integer.parseInt(quantity.getText().toString());
+                            if(q > 0 && position!=-1) {
 
-                                if(offer.getQuantity() > 0) {
-                                    listener.addOfferToBasket(offer);
-                                    holder.bt.setText("ZMIEN" + "(" + String.valueOf(offer.getQuantity()) + ")");
+                                   listener.setQuantityItem(position,q);
+                                   // listener.addOfferToBasket(listener.getOffer(position));
+                                    listener.setPurchasedItem(position,true);
+                                    if(holder != null)
+                                        holder.bt.setText("ZMIEN" + "(" + String.valueOf(q) + ")");
 
                                 }else {
-                                    holder.bt.setText("KUP");
-                                    listener.removeOfferFromBasket(offer);
-                                    Toast.makeText(getContext(),"Ilośc musi być większa niż 0",Toast.LENGTH_SHORT).show();
+                                    if(holder != null)
+                                        holder.bt.setText("KUP");
+                                        listener.setPurchasedItem(position,false);
+                                        listener.removeOfferFromBasket(listener.getOffer(position).getOffer());
+                                        Toast.makeText(getContext(),"Ilośc musi być większa niż 0",Toast.LENGTH_SHORT).show();
                                 }
 
                             }catch(NumberFormatException msg){
@@ -88,6 +91,9 @@ public class OfferItemDialog extends DialogFragment {
                 });
         return builder.create();
     }
+
+
+
 
 
 

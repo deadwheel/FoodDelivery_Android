@@ -1,25 +1,27 @@
 package com.fooddv.fooddelivery.network;
 
 
-import retrofit2.Call;
+import com.fooddv.fooddelivery.models.AccessToken;
+import com.fooddv.fooddelivery.models.Response.DriverOrderActive;
+import com.fooddv.fooddelivery.models.Response.DriverOrders;
+import com.fooddv.fooddelivery.models.Response.DriverSimpleResponse;
+import com.fooddv.fooddelivery.models.Response.OfferResponse;
+import com.fooddv.fooddelivery.models.Response.OrderResponse;
+import com.fooddv.fooddelivery.models.Response.PaymentResponse;
+import com.fooddv.fooddelivery.models.Response.ProfileResponse;
+import com.fooddv.fooddelivery.models.Response.TestResponse;
 
+import java.util.Map;
+
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
-
-import com.fooddv.fooddelivery.models.AccessToken;
-import com.fooddv.fooddelivery.models.Response.DriverSimpleResponse;
-import com.fooddv.fooddelivery.models.Response.OfferResponse;
-import com.fooddv.fooddelivery.models.Response.PaymentResponse;
-import com.fooddv.fooddelivery.models.Response.TestResponse;
-import com.fooddv.fooddelivery.models.Response.DriverOrders;
-import com.fooddv.fooddelivery.models.Response.DriverOrderActive;
-
-import java.util.Map;
 
 public interface ApiService {
 
@@ -40,6 +42,16 @@ public interface ApiService {
 
     @GET("offers")
     Call<OfferResponse> offers();
+
+    @GET("orders")
+    Call<OrderResponse> get_orders();
+    @FormUrlEncoded
+   
+ @PUT("user_details")
+    Call<ProfileResponse> putProfile(@Field("firstname") String firstName, @Field("lastname") String lastName, @Field("address") String address, @Field("postcode") String postcode, @Field("city") String city, @Field("phonenumber") String phonenumber);
+
+    @GET("user_details")
+    Call<ProfileResponse> getProfile();		
 
     @GET("driver/orders/")
     Call<DriverOrders> GetDriverOrders();
