@@ -26,7 +26,7 @@ public class OrderUserActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_user);
         RecyclerView reyclerView = (RecyclerView) findViewById(R.id.OrderRecyclerView);
-        orderRecyklerAdapter = new OrderRecyklerAdapter(this,orders);
+        orderRecyklerAdapter = new OrderRecyklerAdapter(this,orders,service);
         reyclerView.setAdapter(orderRecyklerAdapter);
         reyclerView.setLayoutManager(new LinearLayoutManager(this));
         getOrders();

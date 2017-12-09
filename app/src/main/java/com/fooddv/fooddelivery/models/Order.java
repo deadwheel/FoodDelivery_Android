@@ -14,7 +14,7 @@ public class Order {
       private int id;
       private String driver_loc;
       private String location;
-      private String state;
+      private String status;
       private boolean is_optional_address;
 
       public List<Offer> getOffers() {
@@ -46,11 +46,11 @@ public class Order {
       }
 
       public String getState() {
-            return state;
+            return status;
       }
 
       public void setState(String state) {
-            this.state = state;
+            this.status = state;
       }
 
       public boolean is_optional_address() {

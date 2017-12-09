@@ -358,7 +358,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="39dfb6796dbfb9208cfd74a9cfee29099213cc96">
+        sha1="1b5360c8ad509715d684c0f7cf56d2799f730195">
         <dex dex="/home/damian/Projekty/Android studio/android-merge2/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_37835a598a56b7b4372623be9e36af4e71d800a4/classes.dex" />
     </item>
     <item

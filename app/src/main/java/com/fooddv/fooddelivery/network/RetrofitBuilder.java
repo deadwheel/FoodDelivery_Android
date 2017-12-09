@@ -18,7 +18,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class RetrofitBuilder {
 
-    private static final String BASE_URL = "http://192.168.0.102/food_delivery2/public/api/";
+    private static final String BASE_URL = "http://192.168.0.102/food_delivery7/public/api/";
 
     private final static OkHttpClient client = buildClient();
     private final static Retrofit retrofit = buildRetrofit(client);
@@ -29,7 +29,6 @@ public class RetrofitBuilder {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
 
 // add your other interceptors …
 

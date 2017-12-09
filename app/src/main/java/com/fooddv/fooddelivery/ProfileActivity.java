@@ -1,11 +1,16 @@
 package com.fooddv.fooddelivery;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.fooddv.fooddelivery.models.Response.ProfileResponse;
 
 import retrofit2.Call;
@@ -16,17 +21,21 @@ public class ProfileActivity extends BaseActivity {
     private Call<ProfileResponse> getProfileCall;
     private Call<ProfileResponse> putProfileCall;
 
+    private AwesomeValidation validator;
     private EditText firstName;
     private EditText lastName;
     private EditText address;
     private EditText postCode;
     private EditText city;
     private EditText phoneNumber;
-
+    private TextInputLayout til_phonenumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        validator = new AwesomeValidation(ValidationStyle.TEXT_INPUT_LAYOUT);
+
 
         firstName = (EditText)findViewById(R.id.editTextProfileFirstName);
         lastName = (EditText)findViewById(R.id.editTextProfileLastName);
@@ -34,12 +43,18 @@ public class ProfileActivity extends BaseActivity {
         postCode = (EditText)findViewById(R.id.editTextProfilePostCode);
         city = (EditText)findViewById(R.id.editTextProfileCity);
         phoneNumber = (EditText)findViewById(R.id.editTextProfilePhoneNumber);
-
+        til_phonenumber = (TextInputLayout)findViewById(R.id.til_phonenumber);
+        validator.addValidation(this, R.id.til_phonenumber, RegexTemplate.TELEPHONE, R.string.wrong_phonenumber);
         Button btEdit = (Button)findViewById(R.id.btProfileEdit);
         btEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                putProfile();
+
+                til_phonenumber.setError(null);
+
+                if(validator.validate()) {
+                    putProfile();
+                }
             }
         });
         getProfile();
@@ -52,12 +67,10 @@ public class ProfileActivity extends BaseActivity {
             getProfileCall.enqueue(new Callback<ProfileResponse>() {
                 @Override
                 public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
-                    if (response.isSuccessful()) {
 
-                   try {
-                       Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                       firstName.setText(response.body().getData().get(0).getFirstName());
-                       lastName.setText(response.body().getData().get(0).getLastName());
+                try {
+                     firstName.setText(response.body().getData().get(0).getFirstName());
+                      lastName.setText(response.body().getData().get(0).getLastName());
                        address.setText(response.body().getData().get(0).getAddress());
                        postCode.setText(response.body().getData().get(0).getPostCode());
                        city.setText(response.body().getData().get(0).getCity());
@@ -66,7 +79,6 @@ public class ProfileActivity extends BaseActivity {
                        Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
 
                    }
-                    }
                 }
 
                 @Override
@@ -93,7 +105,8 @@ public class ProfileActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                     if(response.isSuccessful()){
-                        Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Twoje dane zostały edytowane.",Toast.LENGTH_SHORT).show();
+                        refresh();
 
                     }
                 }
@@ -112,5 +125,11 @@ public class ProfileActivity extends BaseActivity {
 
     }
 
+    private void refresh(){
 
+        Intent refresh = new Intent(this, ProfileActivity.class);
+        startActivity(refresh);
+        this.finish();
+
+    }
 }

@@ -9,9 +9,9 @@ import com.squareup.moshi.Json;
 public class Profile {
 
    @Json(name="firstname")
-   private String firstName;
+   private String firstname;
    @Json(name="lastname")
-   private String lastName;
+   private String lastname;
    @Json(name="address")
    private String address;
    @Json(name="postcode")
@@ -21,10 +21,10 @@ public class Profile {
    @Json(name="phonenumber")
    private String phonenumber;
 
-    public Profile(String firstName, String lastName, String address, String postCode, String city, String phonenumber) {
+    public Profile(String firstname, String lastname, String address, String postCode, String city, String phonenumber) {
 
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.address = address;
         this.postCode = postCode;
         this.city = city;
@@ -32,19 +32,19 @@ public class Profile {
     }
 
     public String getFirstName() {
-        return firstName;
+        return firstname;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstname = firstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return lastname;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastname = lastName;
     }
 
     public String getAddress() {
