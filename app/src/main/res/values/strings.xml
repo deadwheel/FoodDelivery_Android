@@ -26,4 +26,5 @@
     <string name="title_activity_tabs">TabsActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="autocomplete_hint">Search a Place</string>
+    <string name="wrong_phonenumber">This phonenumber is wrong</string>
 </resources>

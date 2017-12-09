@@ -3,7 +3,6 @@ package com.fooddv.fooddelivery.fragments;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,8 +37,6 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import java.util.Locale;
-
 /**
  * Created by vr on 2017-11-19.
  */
@@ -56,7 +53,6 @@ public class OrderDialog extends DialogFragment implements  GoogleApiClient.Conn
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
-    private Geocoder geocoder;
     private boolean is_optional_address;
     ImageView delete;
 
@@ -87,10 +83,6 @@ public class OrderDialog extends DialogFragment implements  GoogleApiClient.Conn
         final View myView = inflater.inflate(R.layout.activity_search, null);
         BasketListener listener = (BasketListener) getArguments().getSerializable("listener");
 
-        mGoogleApiClient.connect();
-        boolean test = mGoogleApiClient.isConnected();
-
-        geocoder = new Geocoder(getActivity(), Locale.getDefault());
         final CheckBox checkBox = (CheckBox)myView.findViewById(R.id.checkAddressFromProfile);
 
         mAutocompleteView = (EditText)myView.findViewById(R.id.autocomplete_places);
@@ -166,9 +158,7 @@ public class OrderDialog extends DialogFragment implements  GoogleApiClient.Conn
                                 if(places.getCount()==1){
                                     //Do the things here on Click.....
 
-
-
-                                    mAutocompleteView.setText(places.get(0).getAddress());
+                                    mAutocompleteView.setText(places.getAttributions());
                                    // Toast.makeText(getActivity(),String.valueOf(places.get(0).getLatLng()),Toast.LENGTH_SHORT).show();
                                 }else {
                                     Toast.makeText(getActivity(),Config.SOMETHING_WENT_WRONG,Toast.LENGTH_SHORT).show();
