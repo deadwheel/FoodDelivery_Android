@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.fooddv.fooddelivery.TokenManager;
@@ -240,6 +241,10 @@ public class LocationService extends Service implements com.google.android.gms.l
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+        Log.d("Service",
+                "onConnectionFailed:" + connectionResult.getErrorCode() + "," + connectionResult.getErrorMessage());
+
+
 
     }
 
@@ -264,4 +269,5 @@ public class LocationService extends Service implements com.google.android.gms.l
 
 
     }
+
 }
