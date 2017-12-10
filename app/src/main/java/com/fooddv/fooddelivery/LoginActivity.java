@@ -21,6 +21,11 @@ import com.fooddv.fooddelivery.models.ApiError;
 import com.fooddv.fooddelivery.network.ApiService;
 import com.fooddv.fooddelivery.network.RetrofitBuilder;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.List;
 import java.util.Map;
 
@@ -66,26 +71,36 @@ public class LoginActivity extends AppCompatActivity {
         validator = new AwesomeValidation(ValidationStyle.TEXT_INPUT_LAYOUT);
         setupRules();
 
-        if(tokenManager.getToken().getAccessToken() != null){
 
-                    if(tokenManager.getToken().getRoleID().equals("1")) {
+        if(tokenManager.getToken() != null) {
 
-                        String dupa = tokenManager.getToken().getRoleID();
+            if (tokenManager.getToken().getAccessToken() != null) {
+
+                if(tokenManager.getToken().getRoleID() != null) {
+
+                    if (tokenManager.getToken().getRoleID().equals("1")) {
+
                         startActivity(new Intent(LoginActivity.this, DriverOrdersActivity.class));
+                        finish();
 
                     }
+                }
 
-                    else {
+                 else{
 
 
+                    startActivity(new Intent(LoginActivity.this, OfferActivity.class));
 
-                        startActivity(new Intent(LoginActivity.this, OfferActivity.class));
+                    finish();
 
-                    }
+                }
 
-            finish();
+            }
+
         }
-    }
+
+
+        }
 
     private void showLoading(){
         TransitionManager.beginDelayedTransition(container);
@@ -118,12 +133,20 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
 
                     Log.w(TAG, "onResponse: " + response);
-                    tokenManager.saveToken(response.body());
+                    //tokenManager.saveToken(response.body());
 
                     Toast.makeText(LoginActivity.this,tokenManager.getToken().getRoleID(),Toast.LENGTH_LONG).show();
                     if (response.isSuccessful()) {
 
-                         tokenManager.saveToken(response.body());
+                        AccessToken xd;
+                        xd = response.body();
+
+                        DateTime now = DateTime.now().withZone(DateTimeZone.forID("Europe/Warsaw")).minusMinutes(5);
+                        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+                        String str = now.toString(formatter);
+                        xd.setCreated_at(str);
+
+                         tokenManager.saveToken(xd);
                          startActivity(new Intent(LoginActivity.this, DriverOrdersActivity.class));
 
 

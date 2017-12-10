@@ -57,6 +57,7 @@ public class DriverOrdersActivity extends BaseActivity implements SwipeRefreshLa
         listView = (ExpandableListView)findViewById(R.id.lvExp);
         listAdapter = new ExpandableListAdapter(this,listDataHeader,listHash);
         listView.setAdapter(listAdapter);
+        listView.setEmptyView(findViewById(R.id.empty));
 
 
 

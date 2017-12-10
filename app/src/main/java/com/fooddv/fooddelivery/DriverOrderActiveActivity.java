@@ -71,6 +71,7 @@ public class DriverOrderActiveActivity extends BaseActivity implements ActivityC
         listView = (ExpandableListView)findViewById(R.id.lvExp);
         listAdapter = new ExpandableListAdapter(this,listDataHeader,listHash);
         listView.setAdapter(listAdapter);
+        listView.setEmptyView(findViewById(R.id.empty));
 
         Intent i = getIntent();
 

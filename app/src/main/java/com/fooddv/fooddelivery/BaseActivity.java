@@ -53,7 +53,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         fullView.addDrawerListener(actionBarDrawerToggle);
     */
-        if(tokenManager.getToken() == null){
+        if(tokenManager.getToken().getAccessToken() == null){
             startActivity(new Intent(BaseActivity.this, LoginActivity.class));
             finish();
         }
@@ -141,6 +141,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void logout(){
+
+        tokenManager.deleteToken();
 
         Call<AccessToken> log;
         log = service.logout();
