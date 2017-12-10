@@ -9,6 +9,7 @@ import com.fooddv.fooddelivery.models.Response.OfferResponse;
 import com.fooddv.fooddelivery.models.Response.OrderResponse;
 import com.fooddv.fooddelivery.models.Response.PaymentResponse;
 import com.fooddv.fooddelivery.models.Response.ProfileResponse;
+import com.fooddv.fooddelivery.models.Response.ResponseStatus;
 import com.fooddv.fooddelivery.models.Response.TestResponse;
 
 import java.util.Map;
@@ -69,6 +70,8 @@ public interface ApiService {
     @POST("driver/update_pos/{id}")
     Call<DriverSimpleResponse> update_pos(@Path("id") int id, @Field("position") String position);
 
+    @GET("order_status/{id}")
+    Call<ResponseStatus> getStatusOrder(@Path("id") int id);
 
     @GET("driver/orders/active/")
     Call<DriverOrderActive> get_active();
@@ -81,6 +84,8 @@ public interface ApiService {
             "Content-Type: application/json"})
     @POST("orders")
     Call<TestResponse> orders(@Body Map<String, Object> order );
+
+
 
 
 
