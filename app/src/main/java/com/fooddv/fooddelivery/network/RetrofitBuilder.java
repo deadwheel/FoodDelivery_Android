@@ -2,6 +2,7 @@ package com.fooddv.fooddelivery.network;
 
 
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,10 +21,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Authenticator;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.Route;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,76 +92,55 @@ public class RetrofitBuilder {
 
     public static <T> T createServiceWithAuth(Class<T> service, final TokenManager tokenManager){
 
-        OkHttpClient newClient = client.newBuilder().addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
+        OkHttpClient newClient = client.newBuilder()
+                .authenticator(new Authenticator() {
+                    @Nullable
+                    @Override
+                    public Request authenticate(Route route, final Response response) throws IOException {
 
-                Request request = chain.request();
-
-                Request.Builder builder = request.newBuilder();
-
-                if(tokenManager.getToken().getAccessToken() != null){
-
-                    DateTime now = DateTime.now().withZone(DateTimeZone.forID("Europe/Warsaw"));
-                    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
-                     String str = now.toString(formatter);
-
-
-                     Log.d("GET CREATED AT", "dupa "+tokenManager.getToken().getCreated_at());
-
-                     DateTime simple = formatter.parseDateTime(str);
-                     DateTime created = formatter.parseDateTime(tokenManager.getToken().getCreated_at());
-
-                    Seconds ile_sekund = Seconds.secondsBetween(created, simple);
-                    long sk = ile_sekund.getSeconds();
-
-                    if(tokenManager.getToken().getExpiresIn() < sk) {
+                        AccessToken token = tokenManager.getToken();
 
                         ApiService service = RetrofitBuilder.createService(ApiService.class);
-                        Call<AccessToken> call = service.refresh(tokenManager.getToken().getRefreshToken());
-                        call.enqueue(new Callback<AccessToken>() {
-                            @Override
-                            public void onResponse(Call<AccessToken> call, retrofit2.Response<AccessToken> response) {
+                        Call<AccessToken> call = service.refresh(token.getRefreshToken());
+                        AccessToken fgh = call.execute().body();
 
-                                if(response.isSuccessful()) {
+                           if(fgh != null) {
 
-                                    tokenManager.deleteToken();
+                               tokenManager.saveToken(fgh);
+
+                           }
 
 
-                                    AccessToken xd;
-                                    xd = response.body();
-
-                                    DateTime now = DateTime.now().withZone(DateTimeZone.forID("Europe/Warsaw")).minusMinutes(5);
-                                    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
-                                    String str = now.toString(formatter);
-                                    xd.setCreated_at(str);
-
-                                    tokenManager.saveToken(xd);
-
-                                }
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<AccessToken> call, Throwable throwable) {
-
-                            }
-                        });
-
+                        return response.request().newBuilder().header("Authorization", "Bearer " + tokenManager.getToken().getAccessToken()).build();
 
                     }
 
-                   // Log.d("ZAPYTANIE", str);
+                })
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(final Chain chain) throws IOException {
+
+                        Request request = chain.request();
+                        Request.Builder builder = request.newBuilder();
 
 
-                    builder.addHeader("Authorization", "Bearer " + tokenManager.getToken().getAccessToken());
-                }
-                request = builder.build();
-                TokenManager tokenManager;
+                        if(tokenManager.getToken().getAccessToken() != null) {
 
-                return chain.proceed(request);
-            }
-        }).build();
+                            builder.addHeader("Authorization", "Bearer " + tokenManager.getToken().getAccessToken());
+
+                        }
+
+
+
+                        request = builder.build();
+                        return chain.proceed(request);
+
+                    }
+
+                })
+                .build();
+
+
 
         Retrofit newRetrofit = retrofit.newBuilder().client(newClient).build();
         return newRetrofit.create(service);
@@ -168,4 +150,5 @@ public class RetrofitBuilder {
     public static Retrofit getRetrofit() {
         return retrofit;
     }
+
 }

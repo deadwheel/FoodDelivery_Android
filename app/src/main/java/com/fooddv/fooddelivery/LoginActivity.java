@@ -141,26 +141,27 @@ public class LoginActivity extends AppCompatActivity {
                         AccessToken xd;
                         xd = response.body();
 
-                        DateTime now = DateTime.now().withZone(DateTimeZone.forID("Europe/Warsaw")).minusMinutes(5);
-                        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
-                        String str = now.toString(formatter);
-                        xd.setCreated_at(str);
-
-                         tokenManager.saveToken(xd);
-                         startActivity(new Intent(LoginActivity.this, DriverOrdersActivity.class));
+                        tokenManager.saveToken(xd);
+                        startActivity(new Intent(LoginActivity.this, DriverOrdersActivity.class));
 
 
-                         finish();
-                    } else {
+                        finish();
+                    }
+                    else {
+
                         if (response.code() == 422) {
                             handleErrors(response.errorBody());
 
                         }
+
                         if (response.code() == 401) {
                             ApiError apiError = Utils.converErrors(response.errorBody());
                             Toast.makeText(LoginActivity.this, apiError.getMessage(), Toast.LENGTH_LONG).show();
                         }
+
+
                         showForm();
+
                     }
 
                 }
