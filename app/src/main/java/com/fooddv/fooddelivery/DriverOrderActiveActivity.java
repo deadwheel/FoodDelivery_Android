@@ -68,6 +68,8 @@ public class DriverOrderActiveActivity extends BaseActivity implements ActivityC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dx);
 
+        setTitle("Aktywne zamówienie");
+
         listView = (ExpandableListView)findViewById(R.id.lvExp);
         listAdapter = new ExpandableListAdapter(this,listDataHeader,listHash);
         listView.setAdapter(listAdapter);

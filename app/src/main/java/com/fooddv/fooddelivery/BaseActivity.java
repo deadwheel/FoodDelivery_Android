@@ -142,8 +142,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private void logout(){
 
-        tokenManager.deleteToken();
-
         Call<AccessToken> log;
         log = service.logout();
         log.enqueue(new Callback<AccessToken>() {
