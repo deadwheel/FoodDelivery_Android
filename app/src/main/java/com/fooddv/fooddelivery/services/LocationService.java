@@ -11,7 +11,6 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.fooddv.fooddelivery.TokenManager;
@@ -167,7 +166,7 @@ public class LocationService extends Service implements com.google.android.gms.l
                     currentLocation+="\n"+country;
 
 
-                Toast.makeText(this, currentLocation, Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, currentLocation, Toast.LENGTH_LONG).show();
 
 
             }
@@ -185,7 +184,7 @@ public class LocationService extends Service implements com.google.android.gms.l
                     if(response.isSuccessful()) {
 
                         DriverSimpleResponse blabla = response.body();
-                        Toast.makeText(getApplicationContext(), order_id + " " + blabla.getSuccess(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), order_id + " " + blabla.getSuccess(), Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -196,7 +195,7 @@ public class LocationService extends Service implements com.google.android.gms.l
                 @Override
                 public void onFailure(Call<DriverSimpleResponse> call, Throwable t) {
 
-                    Toast.makeText(getApplicationContext(), order_id + "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), order_id + "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -241,10 +240,6 @@ public class LocationService extends Service implements com.google.android.gms.l
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-        Log.d("Service",
-                "onConnectionFailed:" + connectionResult.getErrorCode() + "," + connectionResult.getErrorMessage());
-
-
 
     }
 
@@ -269,5 +264,4 @@ public class LocationService extends Service implements com.google.android.gms.l
 
 
     }
-
 }

@@ -15,7 +15,17 @@ public class Order {
       private String driver_loc;
       private String location;
       private String status;
+
       private boolean is_optional_address;
+
+      public String getStatus() {
+            return status;
+      }
+
+      public void setStatus(String status) {
+            this.status = status;
+      }
+
 
       public List<Offer> getOffers() {
             return offers;
@@ -80,4 +90,7 @@ public class Order {
       public void setId(int id) {
             this.id = id;
       }
+
+
+
 }

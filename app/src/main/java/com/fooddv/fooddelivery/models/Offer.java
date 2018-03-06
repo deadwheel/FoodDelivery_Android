@@ -1,11 +1,11 @@
 package com.fooddv.fooddelivery.models;
 
-import com.squareup.moshi.Json;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
-public class Offer implements Serializable{
+public class Offer implements Serializable, Parcelable {
 
     int id;
     int offer_id;
@@ -13,6 +13,28 @@ public class Offer implements Serializable{
     String description;
     double price;
     String image;
+
+    protected Offer(Parcel in) {
+        id = in.readInt();
+        offer_id = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        price = in.readDouble();
+        image = in.readString();
+        quantity = in.readInt();
+    }
+
+    public static final Creator<Offer> CREATOR = new Creator<Offer>() {
+        @Override
+        public Offer createFromParcel(Parcel in) {
+            return new Offer(in);
+        }
+
+        @Override
+        public Offer[] newArray(int size) {
+            return new Offer[size];
+        }
+    };
 
     public String getDescription() {
         return description;
@@ -116,5 +138,21 @@ public class Offer implements Serializable{
         int result = id;
         result = 31 * result + name.hashCode();
         return result;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeInt(offer_id);
+        parcel.writeString(name);
+        parcel.writeString(description);
+        parcel.writeDouble(price);
+        parcel.writeString(image);
+        parcel.writeInt(quantity);
     }
 }

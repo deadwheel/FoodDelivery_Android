@@ -6,15 +6,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.fooddv.fooddelivery.fragments.OrderDialog;
-import com.fooddv.fooddelivery.models.Adress;
 import com.fooddv.fooddelivery.models.Offer;
 import com.fooddv.fooddelivery.models.Response.TestResponse;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
@@ -55,31 +55,48 @@ import retrofit2.Response;
 
 public class BasketActivity extends BaseActivity implements BasketListener {
 
+    //stale activity
     private static final String TAG = "BasketActivity";
+    private static final String TITLE = "Koszyk";
+
+    //kolekcje
     private List<Offer> basket = new ArrayList<Offer>();
     private BasketRecyklerAdapter basketRecyklerAdapter;
     private List<ItemListOffer> itemListOffer;
-    private static final int REQUEST_CODE_PAYMENT = 1;
-    private Call<TestResponse> call;
     private Map<Integer, Offer> basketItemMap= new HashMap<>();
     private Map<String, Object> detailed = new HashMap<String, Object>();
+
+    private static final int REQUEST_CODE_PAYMENT = 1;
+
+    //Retrofit
+    private Call<TestResponse> call;
+
+    //Platnosci
     private static PayPalConfiguration paypalConfig = new PayPalConfiguration()
             .environment(Config.PAYPAL_ENVIRONMENT).clientId(
                     Config.PAYPAL_CLIENT_ID);
+
+
+    private TextView sumQuantity;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basket);
-        setTitle("Koszyk");
+        setTitle(TITLE);
+
         Intent intent = getIntent();
+
+        this.setFinishOnTouchOutside(false);
 
         itemListOffer = (List<ItemListOffer>)intent.getSerializableExtra("itemListOffer");
         Moshi moshi = new Moshi.Builder().build();
         Type type = Types.newParameterizedType(List.class, ItemListOffer.class);
         JsonAdapter<List<ItemListOffer>> jsonAdapter = moshi.adapter(type);
-
+        findViewById(R.id.empty).setVisibility(View.GONE);
         SharedPreferences basketShared = getApplication().getSharedPreferences("basket", Context.MODE_PRIVATE);
+
         if(basketShared!=null) {
             String s = basketShared.getString("products", "");
 
@@ -98,7 +115,6 @@ public class BasketActivity extends BaseActivity implements BasketListener {
 
             if (tmpList != null) {
 
-                Toast.makeText(getApplicationContext(), "ala", Toast.LENGTH_SHORT).show();
                 itemListOffer = new ArrayList<>();
                 itemListOffer.addAll(tmpList);
 
@@ -114,16 +130,36 @@ public class BasketActivity extends BaseActivity implements BasketListener {
                 }
 
             }
+            Button orderButton = (Button) findViewById(R.id.btBasketOrder);
+            sumQuantity = (TextView)findViewById(R.id.textViewSumQuantity);
+
+
+            if(itemListOffer == null) {
+
+                sumQuantity.setText("0.0");
+            }
+
+            else {
+                double sQuantity = sumBasket(itemListOffer);
+                sumQuantity.setText(String.valueOf(sQuantity));
+            }
+
 
             if (basket.size() > 0) {
 
+
+
+
+                sumQuantity.setText(sumQuantity.getText()+" "+Config.DEFAULT_CURRENCY);
                 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BasketRecyclerView);
                 basketRecyklerAdapter = new BasketRecyklerAdapter(this, basket);
-
+                LinearLayoutManager linearManager = new LinearLayoutManager(this);
                 recyclerView.setAdapter(basketRecyklerAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                        linearManager.getOrientation());
+                recyclerView.addItemDecoration(dividerItemDecoration);
 
-                Button orderButton = (Button) findViewById(R.id.btBasketOrder);
                 final BasketListener listener = this;
                 orderButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -137,8 +173,9 @@ public class BasketActivity extends BaseActivity implements BasketListener {
                 });
             } else {
 
-                Toast.makeText(getApplicationContext(), "Koszyk pusty", Toast.LENGTH_SHORT).show();
-
+                findViewById(R.id.empty).setVisibility(View.VISIBLE);
+                orderButton.setVisibility(View.GONE);
+                sumQuantity.setVisibility(View.GONE);
             }
         }
 
@@ -171,7 +208,20 @@ public class BasketActivity extends BaseActivity implements BasketListener {
                         makeOrder(paymentId, payment_client);
                         basket.clear();
                         detailed.clear();
-                        basketRecyklerAdapter.notifyDataSetChanged();
+                       /* basketRecyklerAdapter.notifyDataSetChanged();
+                        SharedPreferences basketShared = getApplication().getSharedPreferences("basket", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = basketShared.edit();
+
+                        editor.remove("products").apply();
+                        */
+                        for(ItemListOffer it:itemListOffer){
+
+                            it.setPurchased(false);
+                        }
+
+                        saveBasketMapToJson(itemListOffer);
+
+
                         intentToOffers("Twoje zamówienie zostało zrealizowane");
 
 
@@ -189,11 +239,14 @@ public class BasketActivity extends BaseActivity implements BasketListener {
         }
     }
 
+
+
+
     private void intentToOffers(final String msg){
 
         if(basket.size() == 0){
 
-            Intent offerActivity = new Intent(BasketActivity.this,OfferActivity.class);
+            Intent offerActivity = new Intent(BasketActivity.this,OrderUserActivity.class);
             offerActivity.putExtra("msg",msg);
             startActivity(offerActivity);
 
@@ -208,7 +261,7 @@ public class BasketActivity extends BaseActivity implements BasketListener {
 
 
         detailed.put("payment_details", pay);
-        Toast.makeText(getApplicationContext(),((Adress)detailed.get("order_address")).getOpt_address(),Toast.LENGTH_SHORT).show();
+
         call = service.orders(detailed);
         call.enqueue(new Callback<TestResponse>() {
             @Override
@@ -284,11 +337,6 @@ public class BasketActivity extends BaseActivity implements BasketListener {
     }
 
     @Override
-    public void addOfferToBasket(Offer offer) {
-
-    }
-
-    @Override
     public void setPurchasedItem(int position, boolean value) {
 
     }
@@ -299,16 +347,24 @@ public class BasketActivity extends BaseActivity implements BasketListener {
         basket.remove(offer);
 
         for(ItemListOffer items: itemListOffer) {
+            ItemListOffer it = items;
+            if(it.isPurchased()){
 
-            if(items.isPurchased()){
+                if(it.getOffer().equals(offer)){
 
-                if(items.getOffer().equals(offer)){
-
-                    items.setPurchased(false);
+                    it.setPurchased(false);
 
                 }
 
             }
+
+        }
+        if(sumQuantity!=null)
+        {
+            double sumB = sumBasket(itemListOffer);
+            sumQuantity.setText(String.valueOf(sumB)+" "+Config.DEFAULT_CURRENCY);
+
+
 
         }
         saveBasketMapToJson(itemListOffer);
@@ -325,12 +381,13 @@ public class BasketActivity extends BaseActivity implements BasketListener {
         basket.get(position).setQuantity(value);
 
         for(ItemListOffer items: itemListOffer) {
+            ItemListOffer it = items;
+            if(it.isPurchased()){
 
-            if(items.isPurchased()){
+                if(it.getOffer().equals(basket.get(position))){
 
-                if(items.getOffer().equals(basket.get(position))){
+                    it.getOffer().setQuantity(value);
 
-                    items.getOffer().setQuantity(value);
 
                 }
 
@@ -338,14 +395,17 @@ public class BasketActivity extends BaseActivity implements BasketListener {
 
         }
 
+        if(sumQuantity!=null)
+        {
+            double sumB = sumBasket(itemListOffer);
+            sumQuantity.setText(String.valueOf(sumB)+" "+Config.DEFAULT_CURRENCY);
+
+
+
+        }
         saveBasketMapToJson(itemListOffer);
 
         basketRecyklerAdapter.notifyItemChanged(position);
-    }
-
-    @Override
-    public void putOfferToBasket(int position, Offer offer) {
-
     }
 
     @Override
@@ -359,13 +419,7 @@ public class BasketActivity extends BaseActivity implements BasketListener {
         return null;
     }
 
-    @Override
-    public List<Offer> getBasket() {
-        return null;
-    }
-
-
-    private void saveBasketMapToJson(List<ItemListOffer> itemListOffer){
+     private void saveBasketMapToJson(List<ItemListOffer> itemListOffer){
 
         Moshi moshi = new Moshi.Builder().build();
 
@@ -386,4 +440,29 @@ public class BasketActivity extends BaseActivity implements BasketListener {
 
         detailed.put(key,value);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.setFinishOnTouchOutside(false);
+    }
+
+    private double sumBasket(List<ItemListOffer> basket){
+
+        double sum =0.0;
+
+        for(ItemListOffer b:basket){
+
+            Offer currentOffer = b.getOffer();
+            if(b.isPurchased())
+                sum+=currentOffer.getQuantity()*currentOffer.getPrice();
+
+        }
+
+        return sum;
+
+    }
+
+
+
 }

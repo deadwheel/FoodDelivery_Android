@@ -1,15 +1,13 @@
 package com.fooddv.fooddelivery;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -17,28 +15,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.fooddv.fooddelivery.models.Offer;
 import com.fooddv.fooddelivery.models.Response.OfferResponse;
-import com.fooddv.fooddelivery.models.Response.TestResponse;
-import com.paypal.android.sdk.payments.PayPalConfiguration;
-import com.paypal.android.sdk.payments.PayPalItem;
-import com.paypal.android.sdk.payments.PayPalService;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -49,31 +38,13 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
 
     private static final String TAG = "OfferActivity";
 
-    private Call<TestResponse> call;
-    private Call<OfferResponse> callOffer;
-
-    private List<Offer> offers = new ArrayList<Offer>();
     private List<ItemListOffer> itemListOffers = new ArrayList<>();
-    private List<PayPalItem> itemPaypal = new ArrayList<PayPalItem>();
-    private Set<Offer> basket = new HashSet<Offer>();
-    private Map<String, Object> detailed = new HashMap<String, Object>();
-    private Set<Offer> tmpSet = new HashSet<Offer>();
-    private BasketActivity basketActivity;
-    private List<PayPalItem> productsInCart = new ArrayList<PayPalItem>();
-    private Handler mHandler;
-     private SharedPreferences basketShared;
-    private Map<Integer, Offer> basketItemMap = new HashMap<>();
-    private List<ItemListOffer> listOfferFromJSON;
+    private Set<Offer> basket = new HashSet<>();
 
+    private List<ItemListOffer> listOfferFromJSON;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private OfferRecyklerAdapter offerRecyklerAdapter;
-
-    private static final int REQUEST_CODE_PAYMENT = 1;
-
-    private static PayPalConfiguration paypalConfig = new PayPalConfiguration()
-            .environment(Config.PAYPAL_ENVIRONMENT).clientId(
-                    Config.PAYPAL_CLIENT_ID);
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +55,19 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
         offerRecyklerAdapter = new OfferRecyklerAdapter(this, itemListOffers);
         initRecycler();
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.offerSwipeLayout);
+        swipeRefreshLayout.setRefreshing(true);
 
+        swipeRefreshLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        getOffers();
+                                        swipeRefreshLayout.setRefreshing(false);
+
+                                    }
+                                }
+        );
 
 
         Button order = (Button) findViewById(R.id.btGoToBasket);
@@ -92,117 +75,106 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
             @Override
             public void onClick(View v) {
 
-                Call<OfferResponse> call;
-                detailed.put("order_details", basket);
-
-                if (countPurchased(itemListOffers) > 0) {
-                   /*OrderDialog dialog =  new OrderDialog();
-                    dialog.newInstance(OfferActivity.this).show(getSupportFragmentManager(),"");
-              */
                    Intent basketActivity = new Intent(OfferActivity.this, BasketActivity.class);
-                    //basketActivity.putExtra("basket", (Serializable) getBasket());
-                   // basketActivity.putExtra("basketMap", (Serializable)basketItemMap);
-                    basketActivity.putExtra("itemListOffer", (Serializable) itemListOffers);
-                    startActivity(basketActivity);
+                   startActivity(basketActivity);
 
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Musisz wybrać conajmniej 1 produkt", Toast.LENGTH_SHORT).show();
-                }
-            }
+           }
         });
 
-        Intent intent = new Intent(this, PayPalService.class);
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig);
-        startService(intent);
-
-        Intent basketAcrivity = getIntent();
-
-        if (basketActivity != null) {
-
-            String msg = basketAcrivity.getStringExtra("msg");
-
-
-            if (!msg.equals(" ")) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-
-                builder.setTitle("Potwierdzenie");
-                builder.setMessage(msg);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-            }
-        }
-
-
-
-            getOffers();
-
-
-    }
+   }
 
 
     //Method getOffers using Retrofit to getting offers from database
     public void getOffers() {
 
-        callOffer = service.offers();
-        final OfferActivity root = this;
+        Call<OfferResponse> callOffer = service.offers();
         callOffer.enqueue(new Callback<OfferResponse>() {
             @Override
             public void onResponse(Call<OfferResponse> call, Response<OfferResponse> response) {
 
+                swipeRefreshLayout.setRefreshing(true);
+
                 if (response.isSuccessful()) {
 
-
-                    final OfferResponse rsp = response.body();
                     final List<Offer> o = response.body().getData();
 
                     SharedPreferences basketShared = getApplication().getSharedPreferences("basket", Context.MODE_PRIVATE);
-                   listOfferFromJSON = getItemListOffersFromJSON(basketShared.getString("products",""));
+                    listOfferFromJSON = getItemListOffersFromJSON(basketShared.getString("products", ""));
                     itemListOffers.clear();
 
 
-                        for (int i = 0; i < o.size(); i++) {
-                            o.get(i).setPrice(new BigDecimal(o.get(i).getPrice()).doubleValue());
-                            if (listOfferFromJSON != null) {
-                                Toast.makeText(getApplicationContext(),"Nie null",Toast.LENGTH_SHORT).show();
-                                if (i < listOfferFromJSON.size()) {
-                                    if (listOfferFromJSON.get(i) != null && listOfferFromJSON.get(i).isPurchased()) {
+                    for (int i = 0; i < o.size(); i++) {
+                        o.get(i).setPrice(new BigDecimal(o.get(i).getPrice()).doubleValue());
+                        boolean added = false;
+                        if (listOfferFromJSON != null) {
 
-                                        ItemListOffer item = new ItemListOffer(true, o.get(i), i);
-                                        item.getOffer().setQuantity(listOfferFromJSON.get(i).getOffer().getQuantity());
-                                        itemListOffers.add(item);
+                            /*
+                            if (i < listOfferFromJSON.size()) {
+                                if (listOfferFromJSON.get(i) != null
+                                        && listOfferFromJSON.get(i).isPurchased()
+                                        ) {
 
-                                        continue;
-                                    }
+                                        int index = i;
+
+                                        if(listOfferFromJSON.get(i).getPosition() == null){
+
+                                            index = o.indexOf(listOfferFromJSON.get(i).getOffer());
+                                            if(index!=-1)
+                                                listOfferFromJSON.get(i).setPosition(index);
+                                            else
+                                                index=i;
+
+                                        }
+                                        Toast.makeText(getApplicationContext(),String.valueOf(index)+"-"+String.valueOf(i),Toast.LENGTH_LONG).show();
+                                        if(index == i) {
+                                            ItemListOffer item = new ItemListOffer(true, o.get(i), i);
+                                            item.getOffer().setQuantity(listOfferFromJSON.get(i).getOffer().getQuantity());
+                                            itemListOffers.add(item);
+                                        }
+
+                                    continue;
                                 }
                             }
+                            */
 
-                            itemListOffers.add(new ItemListOffer(false, o.get(i), i));
+                            for(ItemListOffer itemList: listOfferFromJSON){
 
+                              int index = o.indexOf(itemList.getOffer());
+
+                              if(i == index && itemList.isPurchased()){
+
+                                      ItemListOffer item = new ItemListOffer(true, o.get(i), i);
+                                      item.getOffer().setQuantity(itemList.getOffer().getQuantity());
+                                      itemListOffers.add(item);
+                                      added = true;
+                                  }
+                            }
+
+                            if(added){
+
+                                  continue;
+
+                            }
                         }
 
-                        //offerRecyklerAdapter.refresh(itemListOffers);
-                     saveBasketMapToJson(itemListOffers);
+
+                        itemListOffers.add(new ItemListOffer(false, o.get(i), i));
+                    }
+
+
+                    //offerRecyklerAdapter.refresh(itemListOffers);
+                    saveBasketMapToJson(itemListOffers);
+
                     //adapter.notifyDataSetChanged();
-                    offerRecyklerAdapter.refresh(getItemListOffersFromJSON(basketShared.getString("products","")));
+                    offerRecyklerAdapter.refresh(itemListOffers);
                     offerRecyklerAdapter.notifyDataSetChanged();
-
-
 
 
                 } else {
 
 
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -212,9 +184,7 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
         });
     }
 
-
-
-
+    /*
     private void makeClearBasketDialog(final String title, final String msg) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(OfferActivity.this);
@@ -231,7 +201,7 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
         AlertDialog alert = builder.create();
         alert.show();
     }
-
+*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -248,15 +218,6 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
         super.onStop();
     }
 
-    @Override
-    public void addOfferToBasket(Offer offer) {
-        if (offer.getQuantity() > 0) {
-
-           // itemListOffers.r(new ItemListOffer(true, offer));
-
-            Toast.makeText(getApplicationContext(), "Dodano do koszyka:" + offer.getName(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     public void setPurchasedItem(int position, boolean value) {
@@ -283,12 +244,7 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
         saveBasketMapToJson(itemListOffers);
     }
 
-    @Override
-    public void putOfferToBasket(int position, Offer offer) {
 
-        basketItemMap.put(position, offer);
-
-    }
 
     @Override
     public ItemListOffer getOffer(int position) {
@@ -301,17 +257,6 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
     }
 
 
-    @Override
-    public List<Offer> getBasket() {
-        List<Offer> o = new ArrayList<>();
-        for (Iterator<Offer> it = basket.iterator(); it.hasNext(); ) {
-            Offer offer = it.next();
-            o.add(offer);
-        }
-
-        return o;
-    }
-
 
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -322,13 +267,12 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
     public boolean onQueryTextChange(String newText) {
 
         ArrayList<ItemListOffer> searchList = new ArrayList<>();
-        int licznik = 0;
+
         for (ItemListOffer o : itemListOffers) {
 
             String name = o.getOffer().getName().toLowerCase();
 
             if (name.contains(newText)) {
-                //Toast.makeText(getApplicationContext(),name,Toast.LENGTH_SHORT).show();
                 searchList.add(o);
             }
 
@@ -339,12 +283,12 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
         return true;
     }
 
-    private int countPurchased(List<ItemListOffer> item){
+  /*  private int countPurchased(List<ItemListOffer> item) {
 
-        int i=0;
-        for(ItemListOffer it:item){
+        int i = 0;
+        for (ItemListOffer it : item) {
 
-            if(it.isPurchased()){
+            if (it.isPurchased()) {
 
                 i++;
 
@@ -353,7 +297,7 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
         return i;
 
     }
-
+*/
     @Override
     protected void onPostResume() {
 
@@ -361,29 +305,22 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
 
         SharedPreferences basketShared = getApplication().getSharedPreferences("basket", Context.MODE_PRIVATE);
 
-        if(basketShared != null) {
+        if (basketShared != null) {
             String s = basketShared.getString("products", "");
 
 
-
-            if (s != null && !s.equals("")) {
-
+            if (!s.equals("")) {
 
                 listOfferFromJSON = getItemListOffersFromJSON(s);
-                Toast.makeText(getApplicationContext(),"s",Toast.LENGTH_SHORT).show();
 
             }
 
-            if (listOfferFromJSON != null && listOfferFromJSON.size()>0) {
+            if (listOfferFromJSON != null && listOfferFromJSON.size() > 0) {
 
                 itemListOffers = listOfferFromJSON;
 
-
-
-                //initRecycler();
                 offerRecyklerAdapter.refresh(itemListOffers);
                 offerRecyklerAdapter.notifyDataSetChanged();
-
 
 
             }
@@ -391,7 +328,7 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
 
     }
 
-    private void initRecycler(){
+    private void initRecycler() {
 
 
         recyclerView.setAdapter(offerRecyklerAdapter);
@@ -400,26 +337,26 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
 
     }
 
-    private void saveBasketMapToJson(List<ItemListOffer> itemListOffer){
+    private void saveBasketMapToJson(List<ItemListOffer> itemListOffer) {
 
         Moshi moshi = new Moshi.Builder().build();
 
-        Type type = Types.newParameterizedType(List.class,ItemListOffer.class);
+        Type type = Types.newParameterizedType(List.class, ItemListOffer.class);
         JsonAdapter<List<ItemListOffer>> jsonAdapter = moshi.adapter(type);
 
-       String json = jsonAdapter.toJson(itemListOffer);
-       SharedPreferences basketShared = getApplication().getSharedPreferences("basket", Context.MODE_PRIVATE);
-       SharedPreferences.Editor editor = basketShared.edit();
+        String json = jsonAdapter.toJson(itemListOffer);
+        SharedPreferences basketShared = getApplication().getSharedPreferences("basket", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = basketShared.edit();
 
-      editor.remove("products").commit();
-      editor.putString("products",json).commit();
+        editor.remove("products").apply();
+        editor.putString("products", json).commit();
 
 
     }
 
-    private List<ItemListOffer> getItemListOffersFromJSON(String json){
+    private List<ItemListOffer> getItemListOffersFromJSON(String json) {
 
-        if(!json.equals("")) {
+        if (!json.equals("")) {
             List<ItemListOffer> listFromJson = new ArrayList<>();
 
             Moshi moshi = new Moshi.Builder().build();
@@ -431,7 +368,7 @@ public class OfferActivity extends BaseActivity implements SearchView.OnQueryTex
                 e.printStackTrace();
             }
             return listFromJson;
-        }else
+        } else
             return null;
     }
 }

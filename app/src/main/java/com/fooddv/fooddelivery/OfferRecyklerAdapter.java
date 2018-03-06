@@ -157,7 +157,7 @@ public class OfferRecyklerAdapter extends RecyclerView.Adapter<OfferRecyklerAdap
  * @return int is position element at the list
  *
  */
- private int findItem(Offer offer){
+ public int findItem(Offer offer){
 
     List<ItemListOffer> listOffers = listener.getAllItemListOffer();
 

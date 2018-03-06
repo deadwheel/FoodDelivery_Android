@@ -198,7 +198,7 @@ public class DriverOrderActiveActivity extends BaseActivity implements ActivityC
 
     private void end_drive(final DriverOrder order) {
 
-        Toast.makeText(DriverOrderActiveActivity.this,"Koncze", Toast.LENGTH_LONG).show();
+        //Toast.makeText(DriverOrderActiveActivity.this,"Koncze", Toast.LENGTH_LONG).show();
         serviceIntent = new Intent(DriverOrderActiveActivity.this, LocationService.class);
         stopService(serviceIntent);
 
@@ -221,7 +221,7 @@ public class DriverOrderActiveActivity extends BaseActivity implements ActivityC
 
             @Override
             public void onFailure(Call<DriverSimpleResponse> call, Throwable t) {
-                Toast.makeText(DriverOrderActiveActivity.this,"Koncz fail", Toast.LENGTH_LONG).show();
+                //Toast.makeText(DriverOrderActiveActivity.this,"Koncz fail", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -229,7 +229,7 @@ public class DriverOrderActiveActivity extends BaseActivity implements ActivityC
 
     private void cancel_order(final DriverOrder order) {
 
-        Toast.makeText(DriverOrderActiveActivity.this,"anuluj", Toast.LENGTH_LONG).show();
+        //Toast.makeText(DriverOrderActiveActivity.this,"anuluj", Toast.LENGTH_LONG).show();
         serviceIntent = new Intent(DriverOrderActiveActivity.this, LocationService.class);
         stopService(serviceIntent);
 
@@ -252,7 +252,7 @@ public class DriverOrderActiveActivity extends BaseActivity implements ActivityC
 
             @Override
             public void onFailure(Call<DriverSimpleResponse> call, Throwable t) {
-                Toast.makeText(DriverOrderActiveActivity.this,"anuluj fail", Toast.LENGTH_LONG).show();
+                //Toast.makeText(DriverOrderActiveActivity.this,"anuluj fail", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -332,7 +332,7 @@ public class DriverOrderActiveActivity extends BaseActivity implements ActivityC
             @Override
             public void onFailure(Call<DriverOrderActive> call, Throwable t) {
 
-                Toast.makeText(getApplicationContext(),  "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),  "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
 
                 swipeRefreshLayout.setRefreshing(false);
 
