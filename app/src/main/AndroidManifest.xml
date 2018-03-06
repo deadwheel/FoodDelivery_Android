@@ -16,8 +16,8 @@
     <!-- for most things, including card.io & paypal -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".MainActivity"
@@ -29,21 +29,26 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".BaseActivity" />
         <activity android:name=".RegisterActivity" />
-           <activity
+        <activity
             android:name=".OfferActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".OrderUserActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".BasketActivity"/>
+        <activity android:name=".BasketActivity" />
+
         <service android:name=".services.LocationService" />
+
         <activity android:name=".DriverOrdersActivity" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCM8QRJ6SQOUwFLDva2K_JM-otYKFDrkvs" />
 
         <activity android:name=".DriverOrderActiveActivity" />
         <activity android:name=".LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

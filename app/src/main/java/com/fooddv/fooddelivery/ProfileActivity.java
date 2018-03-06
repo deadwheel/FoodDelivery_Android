@@ -6,7 +6,6 @@ import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -35,7 +34,7 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile);
 
         validator = new AwesomeValidation(ValidationStyle.TEXT_INPUT_LAYOUT);
-
+        setTitle("Profil");
 
         firstName = (EditText)findViewById(R.id.editTextProfileFirstName);
         lastName = (EditText)findViewById(R.id.editTextProfileLastName);
@@ -76,7 +75,7 @@ public class ProfileActivity extends BaseActivity {
                        city.setText(response.body().getData().get(0).getCity());
                        phoneNumber.setText(response.body().getData().get(0).getPhonenumber());
                    }catch(NullPointerException ex){
-                       Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+
 
                    }
                 }
@@ -84,13 +83,11 @@ public class ProfileActivity extends BaseActivity {
                 @Override
                 public void onFailure(Call<ProfileResponse> call, Throwable t) {
 
-                    Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show();
-
                 }
             });
         }else {
 
-            Toast.makeText(getApplicationContext(), "null", Toast.LENGTH_SHORT).show();
+
         }
 
     }
@@ -105,7 +102,7 @@ public class ProfileActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                     if(response.isSuccessful()){
-                        Toast.makeText(getApplicationContext(),"Twoje dane zostały edytowane.",Toast.LENGTH_SHORT).show();
+
                         refresh();
 
                     }
@@ -113,14 +110,14 @@ public class ProfileActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(Call<ProfileResponse> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(),"Failed",Toast.LENGTH_SHORT).show();
+
                 }
             });
 
 
         }else {
 
-            Toast.makeText(getApplicationContext(),"Null",Toast.LENGTH_SHORT).show();
+
         }
 
     }

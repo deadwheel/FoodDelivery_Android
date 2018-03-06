@@ -24,6 +24,7 @@ public class BasketRecyklerAdapter extends RecyclerView.Adapter<BasketRecyklerAd
 
     private Context context;
 
+
     private List<Offer> offers;
     private LayoutInflater inflater;
     private BasketListener listener;
@@ -58,7 +59,7 @@ public class BasketRecyklerAdapter extends RecyclerView.Adapter<BasketRecyklerAd
         holder.desc.setText(offers.get(position).getDesc());
         holder.price.setText(String.format("%s %s",new BigDecimal(offers.get(position).getPrice()).setScale(2, BigDecimal.ROUND_HALF_UP).toString(),Config.DEFAULT_CURRENCY));
         holder.quantity.setText(String.valueOf(offers.get(position).getQuantity()));
-
+        holder.sum.setText(String.format("%s %s",new BigDecimal(offers.get(position).getPrice()*offers.get(position).getQuantity()).setScale(2, BigDecimal.ROUND_HALF_UP).toString(),Config.DEFAULT_CURRENCY));
         final Offer offer=offers.get(position);
         final int p = position;
 
@@ -109,6 +110,7 @@ public class BasketRecyklerAdapter extends RecyclerView.Adapter<BasketRecyklerAd
        private TextView desc;
        private TextView quantity;
        private TextView price;
+       private TextView sum;
        private Button order;
        private Button clear;
        private Button edit;
@@ -122,6 +124,7 @@ public class BasketRecyklerAdapter extends RecyclerView.Adapter<BasketRecyklerAd
             this.quantity = (TextView)itemView.findViewById(R.id.textViewBasketOfferQuantity);
             this.remove = (Button)itemView.findViewById(R.id.btBasketOfferRemove);
             this.edit = (Button)itemView.findViewById(R.id.btBasketOfferModifyQuanity);
+            this.sum = (TextView)itemView.findViewById(R.id.textViewBasketItemSum);
 
         }
     }

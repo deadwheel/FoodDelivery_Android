@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -20,11 +19,6 @@ import com.fooddv.fooddelivery.models.AccessToken;
 import com.fooddv.fooddelivery.models.ApiError;
 import com.fooddv.fooddelivery.network.ApiService;
 import com.fooddv.fooddelivery.network.RetrofitBuilder;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 import java.util.Map;
@@ -135,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.w(TAG, "onResponse: " + response);
                     //tokenManager.saveToken(response.body());
 
-                    Toast.makeText(LoginActivity.this,tokenManager.getToken().getRoleID(),Toast.LENGTH_LONG).show();
+
                     if (response.isSuccessful()) {
 
                         AccessToken xd;
@@ -156,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (response.code() == 401) {
                             ApiError apiError = Utils.converErrors(response.errorBody());
-                            Toast.makeText(LoginActivity.this, apiError.getMessage(), Toast.LENGTH_LONG).show();
+
                         }
 
 

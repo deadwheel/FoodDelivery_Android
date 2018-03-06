@@ -230,7 +230,7 @@ public class DriverOrdersActivity extends BaseActivity implements SwipeRefreshLa
 
                     DriverSimpleResponse blabla = response.body();
 
-                    Toast.makeText(getApplicationContext(), order.getAddress() + blabla.getSuccess(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), order.getAddress() + blabla.getSuccess(), Toast.LENGTH_SHORT).show();
 
 
                     listHash.remove(order);
@@ -248,7 +248,7 @@ public class DriverOrdersActivity extends BaseActivity implements SwipeRefreshLa
             @Override
             public void onFailure(Call<DriverSimpleResponse> call, Throwable t) {
 
-                Toast.makeText(getApplicationContext(), order.getAddress() + "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), order.getAddress() + "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -284,7 +284,7 @@ public class DriverOrdersActivity extends BaseActivity implements SwipeRefreshLa
             @Override
             public void onFailure(Call<DriverOrderActive> call, Throwable t) {
 
-                Toast.makeText(getApplicationContext(), movie.getAddress() + "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), movie.getAddress() + "  DriverOrder ! ", Toast.LENGTH_SHORT).show();
 
 
             }

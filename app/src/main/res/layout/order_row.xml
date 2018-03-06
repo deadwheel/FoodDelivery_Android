@@ -1,23 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:elevation="2dp"
+    android:showDividers="middle"
+    android:divider="@android:drawable/divider_horizontal_dark"
+    >
 
-    <TextView
-        android:id="@+id/textViewOrderLocation"
-        android:layout_width="401dp"
-        android:layout_height="49dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="131dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
-    <TextView
-        android:id="@+id/textViewOrderStatus"
-        android:layout_width="398dp"
-        android:layout_height="53dp" />
+        <LinearLayout
+            android:layout_width="212dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btOrderRefresh"
-        android:layout_width="385dp"
-        android:layout_height="wrap_content"
-        android:text="Odswiez" />
+            <TextView
+                android:id="@+id/textViewMyOrderDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/Lokalizacja"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lokalizacja:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/textViewOrderLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textViewMyOrderState"
+                android:layout_width="186dp"
+                android:layout_height="wrap_content"
+                android:text="Stan:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/textViewOrderStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="test" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewOrderSuma"
+                    android:layout_width="52dp"
+                    android:layout_height="wrap_content"
+                    android:text="Suma:"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <TextView
+                    android:id="@+id/textViewOrderSuma2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btOrderRefresh"
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            app:srcCompat="@drawable/quantum_ic_refresh_white_24" />
+
+        <Button
+            android:id="@+id/btRefreshMakeOrder"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.81"
+            android:text="Ponów" />
+    </LinearLayout>
+
 </LinearLayout>

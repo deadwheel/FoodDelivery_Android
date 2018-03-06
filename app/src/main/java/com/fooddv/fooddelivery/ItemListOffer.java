@@ -11,10 +11,10 @@ import java.io.Serializable;
 public class ItemListOffer implements Serializable{
 
     boolean purchased = false;
-    int position;
+    Integer position;
     Offer offer;
 
-    public ItemListOffer(boolean purchased, Offer offer, int position) {
+    public ItemListOffer(boolean purchased, Offer offer, Integer position) {
 
         this.purchased = purchased;
         this.offer = offer;
@@ -37,14 +37,37 @@ public class ItemListOffer implements Serializable{
         this.offer = offer;
     }
 
-    public int getPosition() {
+    public Integer getPosition() {
         return position;
     }
 
-    public void setPosition(int position) {
+    public void setPosition(Integer position) {
         this.position = position;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemListOffer listOffer = (ItemListOffer) o;
+
+        if (purchased != listOffer.purchased) return false;
+        if (position != null ? !position.equals(listOffer.position) : listOffer.position != null)
+            return false;
+        return offer != null ? offer.equals(listOffer.offer) : listOffer.offer == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (purchased ? 1 : 0);
+        result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + (offer != null ? offer.hashCode() : 0);
+        return result;
+    }
+}
+/*
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,4 +86,4 @@ public class ItemListOffer implements Serializable{
         result = 31 * result + position;
         return result;
     }
-}
+*/

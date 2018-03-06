@@ -1,18 +1,25 @@
 package com.fooddv.fooddelivery;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.fooddv.fooddelivery.models.Offer;
 import com.fooddv.fooddelivery.models.Order;
 import com.fooddv.fooddelivery.models.Response.ResponseStatus;
 import com.fooddv.fooddelivery.network.ApiService;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
-import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,30 +36,12 @@ public class OrderRecyklerAdapter extends RecyclerView.Adapter<OrderRecyklerAdap
     private ApiService service;
     private Call<ResponseStatus> responseStatus;
     private String status;
+    private OrderHolder currentHolder;
 
     public OrderRecyklerAdapter(Context context, List<Order> orders, ApiService service) {
         this.context = context;
         this.orders = orders;
         this.service = service;
-
-
-
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     @Override
@@ -69,22 +58,34 @@ public class OrderRecyklerAdapter extends RecyclerView.Adapter<OrderRecyklerAdap
         final OrderHolder holderTmp = holder;
         holder.location.setText(orders.get(position).getLocation());
         holder.status.setText(orders.get(position).getState());
+       // holder.date.setText(orders.get(position).getDate());
         holder.refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 int id = orders.get(position).getId();
                 getStatus(id);
+                currentHolder = holderTmp;
 
-                try {
-                    responseStatus.execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                holderTmp.status.setText(status);
             }
 
         });
 
+        holder.ref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                List<ItemListOffer> itemListOffers = new ArrayList<ItemListOffer>();
+
+                for(Offer it:orders.get(position).getOffers()){
+
+                   itemListOffers.add(new ItemListOffer(true,it,null));
+
+                }
+
+                saveBasketMapToJson(itemListOffers);
+            }
+        });
     }
 
     @Override
@@ -99,13 +100,17 @@ public class OrderRecyklerAdapter extends RecyclerView.Adapter<OrderRecyklerAdap
     public class OrderHolder extends RecyclerView.ViewHolder {
         TextView location;
         TextView status;
-        Button refresh;
+        ImageButton refresh;
+        Button ref;
+
         public OrderHolder(View itemView) {
             super(itemView);
             location = (TextView)itemView.findViewById(R.id.textViewOrderLocation);
-           status = (TextView)itemView.findViewById(R.id.textViewOrderStatus);
-            refresh = (Button)itemView.findViewById(R.id.btOrderRefresh);
-        }
+            status = (TextView)itemView.findViewById(R.id.textViewOrderStatus);
+            refresh = (ImageButton)itemView.findViewById(R.id.btOrderRefresh);
+            ref = (Button)itemView.findViewById(R.id.btRefreshMakeOrder);
+
+         }
     }
 
     public void getStatus(int id){
@@ -115,7 +120,7 @@ public class OrderRecyklerAdapter extends RecyclerView.Adapter<OrderRecyklerAdap
             @Override
             public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
 
-                OrderRecyklerAdapter.this.status = response.body().getStatus();
+               setStatus(response.body().getMessage());
 
             }
 
@@ -127,6 +132,32 @@ public class OrderRecyklerAdapter extends RecyclerView.Adapter<OrderRecyklerAdap
 
     }
 
+    public void setStatus(String status){
+
+        this.status = status;
+        if(this.currentHolder!=null)
+            this.currentHolder.status.setText(status);
+
+    }
+
+
+
+    private void saveBasketMapToJson(List<ItemListOffer> itemListOffer){
+
+        Moshi moshi = new Moshi.Builder().build();
+
+        Type type = Types.newParameterizedType(List.class,ItemListOffer.class);
+        JsonAdapter<List<ItemListOffer>> jsonAdapter = moshi.adapter(type);
+
+        String json = jsonAdapter.toJson(itemListOffer);
+        SharedPreferences basketShared = context.getSharedPreferences("basket", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = basketShared.edit();
+
+        editor.remove("products").commit();
+        editor.putString("products",json).commit();
+
+
+    }
 
 
 

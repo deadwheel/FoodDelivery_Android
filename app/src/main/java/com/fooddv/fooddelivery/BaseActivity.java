@@ -12,11 +12,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import com.fooddv.fooddelivery.models.*;
+import com.fooddv.fooddelivery.models.AccessToken;
 import com.fooddv.fooddelivery.network.ApiService;
 import com.fooddv.fooddelivery.network.RetrofitBuilder;
 
@@ -128,6 +127,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Intent profileActivity = new Intent(BaseActivity.this, ProfileActivity.class);
                 BaseActivity.this.startActivity(profileActivity);
                 break;
+
 
         }
 
