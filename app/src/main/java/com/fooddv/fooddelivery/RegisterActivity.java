@@ -87,8 +87,10 @@ public class RegisterActivity extends AppCompatActivity {
                         tokenManager.saveToken(response.body());
                         startActivity(new Intent(RegisterActivity.this, OfferActivity.class));
                         finish();
+                    } else if (!response.equals(null)){
+                        startActivity(new Intent(RegisterActivity.this, OfferActivity.class));
                     } else {
-                        handleErrors(response.errorBody());
+                        //handleErrors(response.errorBody());
                     }
 
                 }

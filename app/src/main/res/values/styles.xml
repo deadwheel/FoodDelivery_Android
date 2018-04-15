@@ -4,9 +4,10 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorRed_900</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="textColorError">@color/textInputErrorColor</item>
+        <item name="android:windowTranslucentStatus">true</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -21,5 +22,9 @@
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="New" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:statusBarColor">@color/colorAmber_900</item>
+    </style>
 </resources>
 

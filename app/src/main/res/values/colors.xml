@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3b3b3b</color>
-    <color name="colorPrimaryDark">#232323</color>
-    <color name="colorAccent">#ff7c48</color>
-    <color name="textInputErrorColor">#ff3737</color>
-    <color name="offerRowBackground">#e0e0e0</color>
-    <color name="grey">#e3e3e3</color>
+    <color name="colorPrimary">#f18f01</color>
+    <color name="colorPrimaryDark">#048BA8</color>
+    <color name="colorAccent">#FFFFFF</color>
+
+    <!-- 1st Gradient color -->
+    <color name="colorPurple_A400">#D500F9</color>
+    <color name="colorPurple_900">#4A148C</color>
+    <!-- ./ 1st Gradient color -->
+
+    <!-- 2nd Gradient color -->
+    <color name="colorAmber_A400">#ffc400</color>
+    <color name="colorAmber_900">#ff6f00</color>
+    <color name="colorAmber_1200">#d65d00</color>
+    <!-- ./ 2nd Gradient color -->
+
+    <!-- 3rd Gradient color -->
+    <color name="colorGreen_A400">#A7C4B5</color>
+    <color name="colorGreen_900">#A9D8B8</color>
+    <color name="colorGreen_100">#8ab196</color>
+    <!-- ./ 3rd Gradient color -->
+
+    <!-- 4th Gradient color -->
+    <color name="colorRed_A400">#FF1744</color>
+    <color name="colorRed_900">#b71c1c</color>
+    <!-- ./ 4th Gradient color -->
+
 </resources>

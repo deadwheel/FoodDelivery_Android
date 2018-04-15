@@ -48,7 +48,17 @@
             android:value="AIzaSyCM8QRJ6SQOUwFLDva2K_JM-otYKFDrkvs" />
 
         <activity android:name=".DriverOrderActiveActivity" />
+
         <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".Splashscreen"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

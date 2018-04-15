@@ -12,7 +12,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@color/background_material_dark"
+            android:background="@color/colorPrimary"
             />
         <FrameLayout
             android:id="@+id/activity_content"
